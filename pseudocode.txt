@@ -1,0 +1,93 @@
+START
+  Set total = 0
+  Set proceed = ‘Y’
+  Display “Welcome to KShoppe Online Order”
+  WHILE proceed == ‘Y’
+    Display “CATEGORIES”
+    Display “A. Donut”
+    Display “B. Nasi”
+    Display “C. Roti”
+    Prompt “Enter category code : “
+    Read category
+    WHILE category != 'A' && category != 'B' && category != 'C'
+      Clear screen
+      IF category == ‘A’
+        Display “DESERT			PRICE”
+        Display “1. Chocalate Donut		RM3.50”
+        Display “2. Strawberry Donut		RM3.50”
+        Display “3. Cheese Cake Strawberry	RM10”
+        Display “4. Cheese Cake Mango		RM10”
+        Display “Enter beverage number code : “
+        Read code
+        Prompt “Enter quantity : “
+        Read qty
+        IF code == ‘1’
+	        price = 3.5 * qty
+        ELSE IF code == ‘2’
+        	price = 3.5 * qty
+      	ELSE IF code == ‘3’
+      		price = 10 * qty
+      	ELSE IF code == ‘4’
+      		price == 10 * qty
+      	ENDIF
+      	total =  total + price
+      ELSE IF category == ‘B’
+        Display “NASI				PRICE”
+        Display “1. Nasi lemak			RM3.00”
+        Display “2. Nasi lemak telur mata	RM4.00”
+        Display “3. Nasi lemak ayam		RM5.00”
+        Display “4. Nasi berlauk 			RM4.00”
+        Display “Enter nasi number code : “
+        Read code
+        Prompt “Enter quantity : “
+        Read qty
+        IF code == ‘1’
+	        price = 3 * qty
+        ELSE IF code == ‘2’
+        	price = 4 * qty
+	      ELSE IF code == ‘3’
+	       	price = 5 * qty
+      	ELSE IF code == ‘4’
+      		price = 4 * qty
+      	ENDIF
+      	total =  total + price
+     	ELSE IF category == ‘C’
+        Display “BREAD			PRICE”
+        Display “1. Roti pizza bulat	RM3.00”
+        Display “2. Roti pizza panjang	RM3.00”
+        Display “3. Roti badam		RM3.00”
+        Display “4. Sandwich		RM2.80”
+        Display “Enter bread number code : “
+        Read code
+        Display “Enter quantity : “
+        Read qty
+        IF code == ‘1’
+        	price = 3 * qty
+        ELSE IF code == ‘2’
+        	price = 3 * qty
+      	ELSE IF code == ‘3’
+      		price = 3 * qty
+	      ELSE IF code == ‘4’
+      		price = 2.8 * qty
+      	ENDIF
+        total =  total + price
+       ENDIF
+       Display “Total is RM” , total
+       Prompt “Do you want to continue? <Y/N> : “
+       Read proceed
+     ENDWHILE
+	  ENDWHILE
+	 IF proceed != “Y”
+		Display “Your order will be arrived on your doorstep”
+		Prompt “College (MK / TT1 / TT2) : “
+		Read college
+    Prompt “Floor (1-10) : “
+		Read floor
+		Prompt “House number (1-25)  : 
+		Read house
+    Set orderCode =  random(999)
+    Display “Your order code is : “ , orderCode
+    Display “Please use this code for comfirmation with the delivery person”
+  ENDIF
+  Display “Thank you for choosing our shop!”
+END
