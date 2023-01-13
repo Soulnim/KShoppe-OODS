@@ -30,6 +30,10 @@ void drinksMenu();
 void iceCreamMenu();
 void custPayment(float totalMoneyThatCustNeedToPay, char whereItemGo); //-------- custPayment
 void fpxPayment(float money);
+void stocks();
+void itemGoodsInfo();
+void statistics();
+void addInfo();
 
 //==================================== main =============================
 
@@ -440,7 +444,21 @@ void fpxPayment(float money) { //-----------------------------------fpxPayment
 void staffOp() { //---------------------------------------------- staffOp
 	bool isStaff = staffLogin();
 	if (isStaff == true) {
+		int keyStaff;
 		staffMenu();
+		cout << "Enter key : ";
+		cin >> keyStaff;
+		if (keyStaff == 1) {
+			stocks();
+		} else if (keyStaff == 2) {
+			itemGoodsInfo();
+		} else if (keyStaff == 3) {
+			statistics();
+		} else if (keyStaff == 4) {
+			addInfo();
+		} else if (keyStaff == 5) {
+			isStaff = false;
+		}
 	}
 }
 
@@ -450,9 +468,10 @@ void staffMenu() { //-------------------------------------------staffMenu
 	cout << " K-SHOPPE STAFF" << endl;
 	cout << "+----------------+" << endl;
 	cout << " 1. Stocks" << endl;
-	cout << " 2. Item/Goods" << endl;
+	cout << " 2. Item/Goods Info" << endl;
 	cout << " 3. Statistics" << endl;
 	cout << " 4. Additional Info" << endl;
+	cout << " 5. Exit"
 	cout << "+----------------+" << endl;
 }
 
@@ -475,4 +494,36 @@ bool staffLogin() { //------------------------------------------staffLogin
 	}
 	
 	return trueStaff;
+}
+
+void stocks() { //----------------------------------------------stocks
+	system("cls");
+	cout << "+---------------+" << endl;
+	cout << " STOCKS" << endl;
+	cout << "+---------------+" << endl;
+	// edit this part
+}
+
+void itemGoodsInfo() { //---------------------------------------itemGoodsInfo
+	system("cls");
+	cout << "+---------------+" << endl;
+	cout << " ITEM/GOODS INFO" << endl;
+	cout << "+---------------+" << endl;
+	// edit this part
+}
+
+void statistics() { //-------------------------------------------statistics
+	system("cls");
+	cout << "+---------------+" << endl;
+	cout << " STATISTICS" << endl;
+	cout << "+---------------+" << endl;
+	// edit this part
+}
+
+void addInfo() { //------------------------------------------------addInfo
+	system("cls");
+	cout << "+---------------+" << endl;
+	cout << " ADDITIONAL INFO" << endl;
+	cout << "+---------------+" << endl;
+	// edit this part
 }
