@@ -17,7 +17,7 @@ char iceCreamList[99][99] = {"Magnolia", "Aiskrim Malaysia", "Magnum",}; // 3
 int iceCreamQty[99] = {10, 10, 10};
 float iceCreamPrice[99] = {7.00, 0.50, 4.50};
 
-//==================================== fn def ===========================
+//==================================== fn prototype =====================
 
 void custOp();
 void staffOp();
@@ -56,7 +56,9 @@ int main() {
 	}
 }
 
-//=================================== fn proto ==========================
+//=================================== fn def =============================
+
+// FUNCTION (CUSTOMER)
 
 void custOp() { //------------------------------------------------ custOp
 	bool isShopping = true;
@@ -64,13 +66,6 @@ void custOp() { //------------------------------------------------ custOp
 	while (isShopping == true) {
 		custOrder();
 		isShopping = false;
-	}
-}
-
-void staffOp() { //---------------------------------------------- staffOp
-	bool isStaff = staffLogin();
-	if (isStaff == true) {
-		staffMenu();
 	}
 }
 
@@ -83,39 +78,6 @@ void custMenu() { //---------------------------------------------custMenu
 	cout << " 2. Drinks" << endl;
 	cout << " 3. Ice Cream" << endl;
 	cout << "+----------------+" << endl;
-}
-
-void staffMenu() { //-------------------------------------------staffMenu
-	system("cls");
-	cout << "+----------------+" << endl;
-	cout << " K-SHOPPE STAFF" << endl;
-	cout << "+----------------+" << endl;
-	cout << " 1. Stocks" << endl;
-	cout << " 2. Item/Goods" << endl;
-	cout << " 3. Statistics" << endl;
-	cout << " 4. Additional Info" << endl;
-	cout << "+----------------+" << endl;
-}
-
-bool staffLogin() { //------------------------------------------staffLogin
-	system("cls");
-	bool trueStaff = false;
-	char username[99], password[99];
-	cout << "+----------------+" << endl;
-	cout << " STAFF LOGIN" << endl;
-	cout << "+----------------+" << endl;
-	cout << " Enter username : ";
-	cin >> username;
-	cout << " Enter password : ";
-	cin >> password;
-	
-	for (int i = 0; i < 3; i++) {
-		if (strcmp(username, staffName[i]) == 0 && strcmp(password, staffPass[i]) == 0) {
-			trueStaff = true;
-		}
-	}
-	
-	return trueStaff;
 }
 
 void foodsMenu() { //--------------------------------------------foodsMenu
@@ -443,7 +405,7 @@ void custPayment(float totalMoneyThatCustNeedToPay, char whereItemGo) { //------
 	}
 }
 
-void fpxPayment(float money) {
+void fpxPayment(float money) { //-----------------------------------fpxPayment
 	char bankKey;
 	cout << "+--------------+" << endl;
 	cout << " FPX GATEWAY" << endl;
@@ -475,3 +437,42 @@ void fpxPayment(float money) {
 
 // FUNCTION (STAFF)
 
+void staffOp() { //---------------------------------------------- staffOp
+	bool isStaff = staffLogin();
+	if (isStaff == true) {
+		staffMenu();
+	}
+}
+
+void staffMenu() { //-------------------------------------------staffMenu
+	system("cls");
+	cout << "+----------------+" << endl;
+	cout << " K-SHOPPE STAFF" << endl;
+	cout << "+----------------+" << endl;
+	cout << " 1. Stocks" << endl;
+	cout << " 2. Item/Goods" << endl;
+	cout << " 3. Statistics" << endl;
+	cout << " 4. Additional Info" << endl;
+	cout << "+----------------+" << endl;
+}
+
+bool staffLogin() { //------------------------------------------staffLogin
+	system("cls");
+	bool trueStaff = false;
+	char username[99], password[99];
+	cout << "+----------------+" << endl;
+	cout << " STAFF LOGIN" << endl;
+	cout << "+----------------+" << endl;
+	cout << " Enter username : ";
+	cin >> username;
+	cout << " Enter password : ";
+	cin >> password;
+	
+	for (int i = 0; i < 3; i++) {
+		if (strcmp(username, staffName[i]) == 0 && strcmp(password, staffPass[i]) == 0) {
+			trueStaff = true;
+		}
+	}
+	
+	return trueStaff;
+}
