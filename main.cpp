@@ -1,5 +1,6 @@
 #include <iostream>
-#include <list>
+#include <conio.h> // cls
+#include <unistd.h> // sleep
 using namespace std;
 
 //==================================== global var =======================
@@ -28,6 +29,7 @@ void foodsMenu();
 void drinksMenu();
 void iceCreamMenu();
 void custPayment(float totalMoneyThatCustNeedToPay, char whereItemGo); //-------- custPayment
+void fpxPayment(float money);
 
 //==================================== main =============================
 
@@ -36,6 +38,7 @@ int main() {
 	bool exitProgram = false;
 	
 	while (exitProgram == false) {
+		system("cls");
 		cout << "+----------+" << endl;
 		cout << " 1. Customer" << endl;
 		cout << " 2. Staff" << endl;
@@ -72,6 +75,7 @@ void staffOp() { //---------------------------------------------- staffOp
 }
 
 void custMenu() { //---------------------------------------------custMenu
+	system("cls");
 	cout << "+----------------+" << endl;
 	cout << " K-SHOPPE ONLINE" << endl;
 	cout << "+----------------+" << endl;
@@ -82,6 +86,7 @@ void custMenu() { //---------------------------------------------custMenu
 }
 
 void staffMenu() { //-------------------------------------------staffMenu
+	system("cls");
 	cout << "+----------------+" << endl;
 	cout << " K-SHOPPE STAFF" << endl;
 	cout << "+----------------+" << endl;
@@ -93,6 +98,7 @@ void staffMenu() { //-------------------------------------------staffMenu
 }
 
 bool staffLogin() { //------------------------------------------staffLogin
+	system("cls");
 	bool trueStaff = false;
 	char username[99], password[99];
 	cout << "+----------------+" << endl;
@@ -147,7 +153,7 @@ void custOrder() { //------------------------------------------ custOrder
 	for (int i = 0; i < 99; i++) {
 		itemCart[i] = "0";
 	}
-	
+	system("cls");
 	cout << "+------------------------+" << endl;
 	cout << " [S] Self Pickup" << endl;
 	cout << " [D] Delivery" << endl;
@@ -156,12 +162,14 @@ void custOrder() { //------------------------------------------ custOrder
 	cin >> pickupMethod;
 	
 	while (isAdding == true) {
+		system("cls");
 		char category;
 		custMenu();
 		cout << " Choose category : ";
 		cin >> category;
 		
 		if (category == '1') {
+			system("cls");
 			int orderKey;
 			cout << "+-------------+" << endl;
 			cout << " Shop! >> Foods" << endl;
@@ -170,6 +178,7 @@ void custOrder() { //------------------------------------------ custOrder
 			cout << "Choose your food : ";
 			cin >> orderKey;
 			if (orderKey == 1) {
+				system("cls");
 				int foodQty;
 				cout << "+------------------------+" << endl;
 				cout << "| NASI MINYAK    RM 7.00 |" << endl;
@@ -183,10 +192,12 @@ void custOrder() { //------------------------------------------ custOrder
 						itemPrice[i] = foodsPrice[orderKey-1];
 						itemQty[i] = foodQty;
 						cout << "Item successfully added to cart!" << endl;
+						sleep(1);
 						break;
 					}
 				}
 			} else if (orderKey == 2) {
+				system("cls");
 				int foodQty;
 				cout << "+------------------------+" << endl;
 				cout << "| NASI MINYAK    RM 7.00 |" << endl;
@@ -200,10 +211,12 @@ void custOrder() { //------------------------------------------ custOrder
 						itemPrice[i] = foodsPrice[orderKey-1];
 						itemQty[i] = foodQty;
 						cout << "Item successfully added to cart!" << endl;
+						sleep(1);
 						break;
 					}
 				}
 			} else if (orderKey == 3) {
+				system("cls");
 				int foodQty;
 				cout << "+------------------------+" << endl;
 				cout << "| MEE KARI       RM 7.00 |" << endl;
@@ -217,10 +230,12 @@ void custOrder() { //------------------------------------------ custOrder
 						itemPrice[i] = foodsPrice[orderKey-1];
 						itemQty[i] = foodQty;
 						cout << "Item successfully added to cart!" << endl;
+						sleep(1);
 						break;
 					}
 				}
 			} else if (orderKey == 4) {
+				system("cls");
 				int foodQty;
 				cout << "+------------------------+" << endl;
 				cout << "| NASI KANDAR    RM 7.00 |" << endl;
@@ -234,20 +249,145 @@ void custOrder() { //------------------------------------------ custOrder
 						itemPrice[i] = foodsPrice[orderKey-1];
 						itemQty[i] = foodQty;
 						cout << "Item successfully added to cart!" << endl;
+						sleep(1);
 						break;
 					}
 				}
 			}
 		} else if (category == '2') {
+			system("cls");
+			int orderKey;
 			cout << "+-------------+" << endl;
 			cout << " Shop! >> Drinks" << endl;
 			cout << "+-------------+" << endl;
 			drinksMenu();
+			cout << "Choose your drinks : ";
+			cin >> orderKey;
+			if (orderKey == 1) {
+				system("cls");
+				int drinksQty;
+				cout << "+------------------------+" << endl;
+				cout << "| MILO KOTAK     RM 7.00 |" << endl;
+				cout << "|                        |" << endl;
+				cout << "+------------------------+" << endl;
+				cout << "Enter quantity : ";
+				cin >> drinksQty;
+				for (int i = 0; i < 99; i++) {
+					if (itemCart[i] == "0") {
+						itemCart[i] = drinksList[orderKey-1];
+						itemPrice[i] = drinksPrice[orderKey-1];
+						itemQty[i] = drinksQty;
+						cout << "Item successfully added to cart!" << endl;
+						sleep(1);
+						break;
+					}
+				}
+			} else if (orderKey == 2) {
+				system("cls");
+				int drinksQty;
+				cout << "+------------------------+" << endl;
+				cout << "| JAGUNG SUSU    RM 7.00 |" << endl;
+				cout << "|                        |" << endl;
+				cout << "+------------------------+" << endl;
+				cout << "Enter quantity : ";
+				cin >> drinksQty;
+				for (int i = 0; i < 99; i++) {
+					if (itemCart[i] == "0") {
+						itemCart[i] = drinksList[orderKey-1];
+						itemPrice[i] = drinksPrice[orderKey-1];
+						itemQty[i] = drinksQty;
+						cout << "Item successfully added to cart!" << endl;
+						sleep(1);
+						break;
+					}
+				}
+			} else if (orderKey == 3) {
+				system("cls");
+				int drinksQty;
+				cout << "+------------------------+" << endl;
+				cout << "| AIR KOSONG     RM 7.00 |" << endl;
+				cout << "|                        |" << endl;
+				cout << "+------------------------+" << endl;
+				cout << "Enter quantity : ";
+				cin >> drinksQty;
+				for (int i = 0; i < 99; i++) {
+					if (itemCart[i] == "0") {
+						itemCart[i] = drinksList[orderKey-1];
+						itemPrice[i] = drinksPrice[orderKey-1];
+						itemQty[i] = drinksQty;
+						cout << "Item successfully added to cart!" << endl;
+						sleep(1);
+						break;
+					}
+				}
+			}
 		} else {
+			system("cls");
+			int orderKey;
 			cout << "+-------------+" << endl;
 			cout << " Shop! >> Ice Cream" << endl;
 			cout << "+-------------+" << endl;
 			iceCreamMenu();
+			cout << "Choose your ice cream : ";
+			cin >> orderKey;
+			if (orderKey == 1) {
+				system("cls");
+				int iceCreamQty;
+				cout << "+------------------------+" << endl;
+				cout << "| MAGNOLIA       RM 7.00 |" << endl;
+				cout << "|                        |" << endl;
+				cout << "+------------------------+" << endl;
+				cout << "Enter quantity : ";
+				cin >> iceCreamQty;
+				for (int i = 0; i < 99; i++) {
+					if (itemCart[i] == "0") {
+						itemCart[i] = iceCreamList[orderKey-1];
+						itemPrice[i] = iceCreamPrice[orderKey-1];
+						itemQty[i] = iceCreamQty;
+						cout << "Item successfully added to cart!" << endl;
+						sleep(1);
+						break;
+					}
+				}
+			} else if (orderKey == 2) {
+				system("cls");
+				int iceCreamQty;
+				cout << "+------------------------+" << endl;
+				cout << "| ESKEM MESIA    RM 7.00 |" << endl;
+				cout << "|                        |" << endl;
+				cout << "+------------------------+" << endl;
+				cout << "Enter quantity : ";
+				cin >> iceCreamQty;
+				for (int i = 0; i < 99; i++) {
+					if (itemCart[i] == "0") {
+						itemCart[i] = iceCreamList[orderKey-1];
+						itemPrice[i] = iceCreamPrice[orderKey-1];
+						itemQty[i] = iceCreamQty;
+						cout << "Item successfully added to cart!" << endl;
+						sleep(1);
+						break;
+					}
+				}
+			} else if (orderKey == 3) {
+				system("cls");
+				int iceCreamQty;
+				cout << "+------------------------+" << endl;
+				cout << "| MAGNUM         RM 7.00 |" << endl;
+				cout << "|                        |" << endl;
+				cout << "+------------------------+" << endl;
+				cout << "Enter quantity : ";
+				cin >> iceCreamQty;
+				for (int i = 0; i < 99; i++) {
+					if (itemCart[i] == "0") {
+						itemCart[i] = iceCreamList[orderKey-1];
+						itemPrice[i] = iceCreamPrice[orderKey-1];
+						itemQty[i] = iceCreamQty;
+						cout << "Item successfully added to cart!" << endl;
+						sleep(1);
+						break;
+					}
+				}
+			}
 		}
 		char isContinue = 'Y';
 		cout << "Add another order? (Y/N) : ";
@@ -261,6 +401,7 @@ void custOrder() { //------------------------------------------ custOrder
 			totalPrice = totalPrice + (itemPrice[i] * itemQty[i]);
 		}
 	}
+	system("cls");
 	cout << "+----------+" << endl;
 	cout << " ORDER LIST" << endl;
 	cout << "+----------+" << endl;
@@ -284,16 +425,53 @@ void custPayment(float totalMoneyThatCustNeedToPay, char whereItemGo) { //------
 		cout << "Choose payment method : ";
 		cin >> paymentKey;
 		if (paymentKey == 1) {
+			system("cls");
+			// add payOnPickup() method function
 			cout << "Checkout successfully!" << endl;
+			sleep(3);
 		} else {
-			cout << "Choosing bank..." << endl;
-			// edit this part later!
+			system("cls");
+			fpxPayment(totalMoneyThatCustNeedToPay);
+			cout << "Checkout successfully!" << endl;
+			sleep(3);
 		}
 	} else {
-		cout << "+-----------------+" << endl;
-		cout << "| PAYMENT METHOD  |" << endl;
-		cout << "+-----------------+" << endl;
-		cout << "Choosing bank..." << endl;
-		cout << "Checkout successfully" << endl;
+		fpxPayment(totalMoneyThatCustNeedToPay);
+		system("cls");
+		cout << "Checkout successfully!" << endl;
+		sleep(3);
 	}
 }
+
+void fpxPayment(float money) {
+	char bankKey;
+	cout << "+--------------+" << endl;
+	cout << " FPX GATEWAY" << endl;
+	cout << "+--------------+" << endl;
+	cout << " [A] Bank Islam" << endl;
+	cout << " [B] BSN" << endl;
+	cout << " [C] RHB" << endl;
+	cout << " [D] Maybank" << endl;
+	cout << " Choose your bank :";
+	cin >> bankKey;
+	if (bankKey == 'A' || bankKey == 'a') {
+		system("cls");
+		cout << "Redirecting to Bank Islam's page..." << endl;
+		sleep(3);
+	} else if (bankKey == 'B' || bankKey == 'b') {
+		system("cls");
+		cout << "Redirecting to BSN's page..." << endl;
+		sleep(3);
+	} else if (bankKey == 'C' || bankKey == 'c') {
+		system("cls");
+		cout << "Redirecting to RHB's page..." << endl;
+		sleep(3);
+	} else {
+		system("cls");
+		cout << "Redirecting to Maybank's page..." << endl;
+		sleep(3);
+	}
+}
+
+// FUNCTION (STAFF)
+
