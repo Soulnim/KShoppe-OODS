@@ -1,17 +1,18 @@
 #include <iostream>
+#include <list>
 using namespace std;
 
 //==================================== global var =======================
 
-char staffName[99][99] = {"Luqman", "Adib", "Zarif", "0"};
+char staffName[99][99] = {"Luqman", "Adib", "Zarif"}; // 3
 char staffPass[99][99] = {"luqman123", "adibudeen", "zash04"};
-char foodsList[99][99] = {"Nasi Minyak Ayam Kari", "Nasi Minyak Ayam Merah", "Mee Kari", "Nasi Kandar", "0"};
+char foodsList[99][99] = {"Nasi Minyak Ayam Kari", "Nasi Minyak Ayam Merah", "Mee Kari", "Nasi Kandar"}; // 4
 int foodsQty[99] = {10, 10, 10, 10};
 float foodsPrice[99] = {7.00, 7.00, 6.00, 8.00};
-char drinksList[99][99] = {"Milo Kotak", "Jagung Susu", "Air Kosong", "0"};
+char drinksList[99][99] = {"Milo Kotak", "Jagung Susu", "Air Kosong"}; // 3
 int drinksQty[99] = {10, 10, 10};
 float drinksPrice[99] = {2.50, 5.00, 1.00};
-char iceCreamList[99][99] = {"Magnolia", "Aiskrim Malaysia", "Magnum", "0"};
+char iceCreamList[99][99] = {"Magnolia", "Aiskrim Malaysia", "Magnum",}; // 3
 int iceCreamQty[99] = {10, 10, 10};
 float iceCreamPrice[99] = {7.00, 0.50, 4.50};
 
@@ -22,11 +23,11 @@ void staffOp();
 void custMenu();
 void staffMenu();
 bool staffLogin();
-float custOrder();
+void custOrder();
 void foodsMenu();
 void drinksMenu();
 void iceCreamMenu();
-void stationariesMenu();
+void custPayment(float totalMoneyThatCustNeedToPay, char whereItemGo); //-------- custPayment
 
 //==================================== main =============================
 
@@ -56,10 +57,10 @@ int main() {
 
 void custOp() { //------------------------------------------------ custOp
 	bool isShopping = true;
-	float totalPayment;
 	
 	while (isShopping == true) {
-		totalPayment = custOrder();
+		custOrder();
+		isShopping = false;
 	}
 }
 
@@ -112,11 +113,7 @@ bool staffLogin() { //------------------------------------------staffLogin
 }
 
 void foodsMenu() { //--------------------------------------------foodsMenu
-	int totalFoods = 0;
-	while (foodsList[totalFoods] != "0") {
-		totalFoods++;
-	}
-	for (int i = 0; i < totalFoods; i++) {
+	for (int i = 0; i < 4; i++) {
 		cout << " " << i + 1 << ". " << foodsList[i] << endl;
 		cout << " Price : RM " << foodsPrice[i] << " , Available : " << foodsQty[i] << endl;
 		cout << endl;
@@ -124,11 +121,7 @@ void foodsMenu() { //--------------------------------------------foodsMenu
 }
 
 void drinksMenu() { //------------------------------------------drinksMenu
-	int totalDrinks = 0;
-	while (drinksList[totalDrinks] != "0") {
-		totalDrinks++;
-	}
-	for (int i = 0; i < totalDrinks; i++) {
+	for (int i = 0; i < 3; i++) {
 		cout << " " << i + 1 << ". " << drinksList[i] << endl;
 		cout << " Price : RM " << drinksPrice[i] << " , Available : " << drinksQty[i] << endl;
 		cout << endl;
@@ -136,22 +129,31 @@ void drinksMenu() { //------------------------------------------drinksMenu
 }
 
 void iceCreamMenu() { //--------------------------------------iceCreamMenu
-	int totalIceCream = 0;
-	while (totalIceCream < 3) {
-		if (iceCreamList[totalIceCream] != "0") {
-			cout << " " << totalIceCream + 1 << ". " << iceCreamList[totalIceCream] << endl;
-			cout << " Price : RM " << iceCreamPrice[totalIceCream] << " , Available : " << iceCreamQty[totalIceCream] << endl;
-			cout << endl;
-		}
-		totalIceCream++;
+	for (int i = 0; i < 3; i++) {
+		cout << " " << i + 1 << ". " << iceCreamList[i] << endl;
+		cout << " Price : RM " << iceCreamPrice[i] << " , Available : " << iceCreamQty[i] << endl;
+		cout << endl;
 	}
 }
 
-float custOrder() { //------------------------------------------ custOrder
-	char itemCart[99][99] = {};
-	char itemPrice[99] = {};
-	char itemQty[99] = {};
+void custOrder() { //------------------------------------------ custOrder
+	string itemCart[99];
+	float itemPrice[99];
+	int itemQty[99];
 	bool isAdding = true;
+	float totalPrice = 0;
+	char pickupMethod;
+	
+	for (int i = 0; i < 99; i++) {
+		itemCart[i] = "0";
+	}
+	
+	cout << "+------------------------+" << endl;
+	cout << " [S] Self Pickup" << endl;
+	cout << " [D] Delivery" << endl;
+	cout << "+------------------------+" << endl;
+	cout << "Choose your preference : ";
+	cin >> pickupMethod;
 	
 	while (isAdding == true) {
 		char category;
@@ -160,10 +162,82 @@ float custOrder() { //------------------------------------------ custOrder
 		cin >> category;
 		
 		if (category == '1') {
+			int orderKey;
 			cout << "+-------------+" << endl;
 			cout << " Shop! >> Foods" << endl;
 			cout << "+-------------+" << endl;
 			foodsMenu();
+			cout << "Choose your food : ";
+			cin >> orderKey;
+			if (orderKey == 1) {
+				int foodQty;
+				cout << "+------------------------+" << endl;
+				cout << "| NASI MINYAK    RM 7.00 |" << endl;
+				cout << "| AYAM KARI              |" << endl;
+				cout << "+------------------------+" << endl;
+				cout << "Enter quantity : ";
+				cin >> foodQty;
+				for (int i = 0; i < 99; i++) {
+					if (itemCart[i] == "0") {
+						itemCart[i] = foodsList[orderKey-1];
+						itemPrice[i] = foodsPrice[orderKey-1];
+						itemQty[i] = foodQty;
+						cout << "Item successfully added to cart!" << endl;
+						break;
+					}
+				}
+			} else if (orderKey == 2) {
+				int foodQty;
+				cout << "+------------------------+" << endl;
+				cout << "| NASI MINYAK    RM 7.00 |" << endl;
+				cout << "| AYAM MERAH             |" << endl;
+				cout << "+------------------------+" << endl;
+				cout << "Enter quantity : ";
+				cin >> foodQty;
+				for (int i = 0; i < 99; i++) {
+					if (itemCart[i] == "0") {
+						itemCart[i] = foodsList[orderKey-1];
+						itemPrice[i] = foodsPrice[orderKey-1];
+						itemQty[i] = foodQty;
+						cout << "Item successfully added to cart!" << endl;
+						break;
+					}
+				}
+			} else if (orderKey == 3) {
+				int foodQty;
+				cout << "+------------------------+" << endl;
+				cout << "| MEE KARI       RM 7.00 |" << endl;
+				cout << "|                        |" << endl;
+				cout << "+------------------------+" << endl;
+				cout << "Enter quantity : ";
+				cin >> foodQty;
+				for (int i = 0; i < 99; i++) {
+					if (itemCart[i] == "0") {
+						itemCart[i] = foodsList[orderKey-1];
+						itemPrice[i] = foodsPrice[orderKey-1];
+						itemQty[i] = foodQty;
+						cout << "Item successfully added to cart!" << endl;
+						break;
+					}
+				}
+			} else if (orderKey == 4) {
+				int foodQty;
+				cout << "+------------------------+" << endl;
+				cout << "| NASI KANDAR    RM 7.00 |" << endl;
+				cout << "|                        |" << endl;
+				cout << "+------------------------+" << endl;
+				cout << "Enter quantity : ";
+				cin >> foodQty;
+				for (int i = 0; i < 99; i++) {
+					if (itemCart[i] == "0") {
+						itemCart[i] = foodsList[orderKey-1];
+						itemPrice[i] = foodsPrice[orderKey-1];
+						itemQty[i] = foodQty;
+						cout << "Item successfully added to cart!" << endl;
+						break;
+					}
+				}
+			}
 		} else if (category == '2') {
 			cout << "+-------------+" << endl;
 			cout << " Shop! >> Drinks" << endl;
@@ -175,6 +249,51 @@ float custOrder() { //------------------------------------------ custOrder
 			cout << "+-------------+" << endl;
 			iceCreamMenu();
 		}
-		isAdding = false;
+		char isContinue = 'Y';
+		cout << "Add another order? (Y/N) : ";
+		cin >> isContinue;
+		if (toupper(isContinue) == 'N') {
+			isAdding = false;
+		}
+	}
+	for (int i = 0; i < 99; i++) {
+		if (itemCart[i] != "0") {
+			totalPrice = totalPrice + (itemPrice[i] * itemQty[i]);
+		}
+	}
+	cout << "+----------+" << endl;
+	cout << " ORDER LIST" << endl;
+	cout << "+----------+" << endl;
+	for (int i = 0; i < 99; i++) {
+		if (itemCart[i] != "0") {
+			cout << " " << i+1 << ". " << itemCart[i] << "(" << itemQty[i] << ")" << endl;
+		}
+	}
+	cout << "The total price : RM " << totalPrice << endl;
+	custPayment(totalPrice, pickupMethod);
+}
+
+void custPayment(float totalMoneyThatCustNeedToPay, char whereItemGo) { //-------- custPayment
+	int paymentKey;
+	if (whereItemGo == 'S' || whereItemGo == 's') {
+		cout << "+-----------------+" << endl;
+		cout << "| PAYMENT METHOD  |" << endl;
+		cout << "+-----------------+" << endl;
+		cout << " 1. Pay On Pickup" << endl;
+		cout << " 2. FPX" << endl;
+		cout << "Choose payment method : ";
+		cin >> paymentKey;
+		if (paymentKey == 1) {
+			cout << "Checkout successfully!" << endl;
+		} else {
+			cout << "Choosing bank..." << endl;
+			// edit this part later!
+		}
+	} else {
+		cout << "+-----------------+" << endl;
+		cout << "| PAYMENT METHOD  |" << endl;
+		cout << "+-----------------+" << endl;
+		cout << "Choosing bank..." << endl;
+		cout << "Checkout successfully" << endl;
 	}
 }
