@@ -3,6 +3,8 @@
 #include <unistd.h> // sleep
 using namespace std;
 
+// baca nota kaki (bawah sekali)
+
 //==================================== global var =======================
 
 char staffName[99][99] = {"Luqman", "Adib", "Zarif"}; // 3
@@ -652,3 +654,15 @@ void addInfo() { //------------------------------------------------addInfo
 	cout << "    Press Enter to continue ";
 	getch();
 }
+
+// ada beberapa part cam siap agi, tp ni gambaran awal la
+// yg tak buat agi,
+// 1) deduction jumlah stock lepas customer order barang tuh, astu
+//    update kat staff section -> stocks
+// 2) staff bole update stock barang
+// 3) bahagian statistics, cam sikit je
+// ... and sebenarnya saiz2 output tu aku buat scale kecik, mungkin
+// besarkan sikit kot
+// and mungkin ada algorithm yg macam tak necessary un, so kalau
+// korang ada cadangan nak improvekan algorithmnya, nnti suggest ah
+// ...again aku cakap, ni cuma idea je
