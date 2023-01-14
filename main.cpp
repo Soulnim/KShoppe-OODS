@@ -16,6 +16,8 @@ float drinksPrice[99] = {2.50, 5.00, 1.00};
 char iceCreamList[99][99] = {"Magnolia", "Aiskrim Malaysia", "Magnum",}; // 3
 int iceCreamQty[99] = {10, 10, 10};
 float iceCreamPrice[99] = {7.00, 0.50, 4.50};
+int totalCust = 0;
+float paymentList[99] = {};
 
 //==================================== fn prototype =====================
 
@@ -43,12 +45,14 @@ int main() {
 	
 	while (exitProgram == false) {
 		system("cls");
-		cout << "+----------+" << endl;
-		cout << " 1. Customer" << endl;
-		cout << " 2. Staff" << endl;
-		cout << " 3. Exit" << endl;
-		cout << "+----------+" << endl;
-		cout << " Enter key : ";
+		cout << "+--------------------------------------+" << endl;
+		cout << "|          WELCOME TO KSHOPPE          |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "|      ( )         [ ]        |\\/|     |" << endl;
+		cout << "|      / \\         / \\        |/\\|     |" << endl;
+		cout << "| [1] Customer  [2] Staff   [3] Exit   |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "            Enter key : ";
 		cin >> custOrStaff;
 		if (custOrStaff == '1') {
 			custOp();
@@ -75,13 +79,13 @@ void custOp() { //------------------------------------------------ custOp
 
 void custMenu() { //---------------------------------------------custMenu
 	system("cls");
-	cout << "+----------------+" << endl;
-	cout << " K-SHOPPE ONLINE" << endl;
-	cout << "+----------------+" << endl;
+	cout << "+--------------------------------------+" << endl;
+	cout << "|           K-SHOPPE ONLINE            |" << endl;
+	cout << "+--------------------------------------+" << endl;
 	cout << " 1. Foods" << endl;
 	cout << " 2. Drinks" << endl;
 	cout << " 3. Ice Cream" << endl;
-	cout << "+----------------+" << endl;
+	cout << "+--------------------------------------+" << endl;
 }
 
 void foodsMenu() { //--------------------------------------------foodsMenu
@@ -120,11 +124,14 @@ void custOrder() { //------------------------------------------ custOrder
 		itemCart[i] = "0";
 	}
 	system("cls");
-	cout << "+------------------------+" << endl;
-	cout << " [S] Self Pickup" << endl;
-	cout << " [D] Delivery" << endl;
-	cout << "+------------------------+" << endl;
-	cout << "Choose your preference : ";
+	cout << "+--------------------------------------+" << endl;
+	cout << "|            PICKUP METHOD             |" << endl;
+	cout << "+--------------------------------------+" << endl;
+	cout << "|       / |--|           /==\\          |" << endl;
+	cout << "|       -o--o-           |__|          |" << endl;
+	cout << "|   [D] Delivery    [S] Self Pickup    |" << endl;
+	cout << "+--------------------------------------+" << endl;
+	cout << "     Choose your preference : ";
 	cin >> pickupMethod;
 	
 	while (isAdding == true) {
@@ -407,6 +414,8 @@ void custPayment(float totalMoneyThatCustNeedToPay, char whereItemGo) { //------
 		cout << "Checkout successfully!" << endl;
 		sleep(3);
 	}
+	paymentList[totalCust] = totalMoneyThatCustNeedToPay;
+	totalCust = totalCust + 1;
 }
 
 void fpxPayment(float money) { //-----------------------------------fpxPayment
@@ -443,7 +452,7 @@ void fpxPayment(float money) { //-----------------------------------fpxPayment
 
 void staffOp() { //---------------------------------------------- staffOp
 	bool isStaff = staffLogin();
-	if (isStaff == true) {
+	while (isStaff == true) {
 		int keyStaff;
 		staffMenu();
 		cout << "Enter key : ";
@@ -451,12 +460,10 @@ void staffOp() { //---------------------------------------------- staffOp
 		if (keyStaff == 1) {
 			stocks();
 		} else if (keyStaff == 2) {
-			itemGoodsInfo();
-		} else if (keyStaff == 3) {
 			statistics();
-		} else if (keyStaff == 4) {
+		} else if (keyStaff == 3) {
 			addInfo();
-		} else if (keyStaff == 5) {
+		} else if (keyStaff == 4) {
 			isStaff = false;
 		}
 	}
@@ -468,10 +475,9 @@ void staffMenu() { //-------------------------------------------staffMenu
 	cout << " K-SHOPPE STAFF" << endl;
 	cout << "+----------------+" << endl;
 	cout << " 1. Stocks" << endl;
-	cout << " 2. Item/Goods Info" << endl;
-	cout << " 3. Statistics" << endl;
-	cout << " 4. Additional Info" << endl;
-	cout << " 5. Exit"
+	cout << " 2. Statistics" << endl;
+	cout << " 3. Additional Info" << endl;
+	cout << " 4. Exit" << endl;
 	cout << "+----------------+" << endl;
 }
 
@@ -498,26 +504,66 @@ bool staffLogin() { //------------------------------------------staffLogin
 
 void stocks() { //----------------------------------------------stocks
 	system("cls");
+	int stocksKey;
 	cout << "+---------------+" << endl;
 	cout << " STOCKS" << endl;
 	cout << "+---------------+" << endl;
-	// edit this part
-}
-
-void itemGoodsInfo() { //---------------------------------------itemGoodsInfo
-	system("cls");
-	cout << "+---------------+" << endl;
-	cout << " ITEM/GOODS INFO" << endl;
-	cout << "+---------------+" << endl;
-	// edit this part
+	cout << " [1] Foods" << endl;
+	cout << " [2] Drinks" << endl;
+	cout << " [3] Ice Cream" << endl;
+	cout << "Choose category : ";
+	cin >> stocksKey;
+	if (stocksKey == 1) {
+		system("cls");
+		cout << "+-------------------------------+" << endl;
+		cout << " STOCKS => FOODS" << endl;
+		cout << "+-------------------------------+" << endl;
+		for (int i = 0; i < 4; i++) {
+			cout << " " << i+1 << ". " << foodsList[i] << endl;
+			cout << " Stocks : " << foodsQty[i] << endl;
+		}
+		cout << endl;
+	} else if (stocksKey == 2) {
+		system("cls");
+		cout << "+-------------------------------+" << endl;
+		cout << " STOCKS => DRINKS" << endl;
+		cout << "+-------------------------------+" << endl;
+		for (int i = 0; i < 3; i++) {
+			cout << " " << i+1 << ". " << drinksList[i] << endl;
+			cout << " Stocks : " << drinksQty[i] << endl;
+		}
+		cout << endl;
+	} else if (stocksKey == 3) {
+		system("cls");
+		cout << "+-------------------------------+" << endl;
+		cout << " STOCKS => ICE CREAM" << endl;
+		cout << "+-------------------------------+" << endl;
+		for (int i = 0; i < 3; i++) {
+			cout << " " << i+1 << ". " << iceCreamList[i] << endl;
+			cout << " Stocks : " << iceCreamQty[i] << endl;
+		}
+		cout << endl;
+	}
+	cout << "Press Enter to Continue";
+	getch();
 }
 
 void statistics() { //-------------------------------------------statistics
 	system("cls");
+	float moneyFromCust = 0;
 	cout << "+---------------+" << endl;
 	cout << " STATISTICS" << endl;
 	cout << "+---------------+" << endl;
-	// edit this part
+	cout << "Total customer : " << totalCust << endl;
+	for (int i = 0; i < 99; i++) {
+		if (paymentList[i] > 0) {
+			moneyFromCust = moneyFromCust + paymentList[i];
+		}
+	}
+	cout << "Total payment : " << moneyFromCust << endl;
+	cout << endl;
+	cout << "Press Enter to continue ";
+	getch();
 }
 
 void addInfo() { //------------------------------------------------addInfo
@@ -525,5 +571,11 @@ void addInfo() { //------------------------------------------------addInfo
 	cout << "+---------------+" << endl;
 	cout << " ADDITIONAL INFO" << endl;
 	cout << "+---------------+" << endl;
-	// edit this part
+	cout << " Program Informations : " << endl;
+	cout << " Version : 1.0" << endl;
+	cout << " Last update : 14/1/2023" << endl;
+	
+	cout << endl;
+	cout << "Press Enter to continue ";
+	getch();
 }
