@@ -1,1 +1,1 @@
-KShoppe Online Ordering And Delievery System
+KShoppe Online Ordering And Delivery System
