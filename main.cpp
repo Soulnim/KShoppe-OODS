@@ -20,8 +20,9 @@ int iceCreamQty[99] = {10, 10, 10};
 float iceCreamPrice[99] = {7.00, 0.50, 4.50};
 int totalCust = 0;
 float paymentList[99] = {};
-void noStock();
-void inputPlease();
+bool isTerminate = false;
+int terminateKey = 90271;
+
 //==================================== fn prototype =====================
 
 void custOp();
@@ -41,21 +42,23 @@ void addInfo();
 void viewStocks();
 void updateStocks();
 void inputErrorHandling();
+void noStock();
+void inputPlease();
+bool terminateProgram();
 
 //==================================== main =============================
 
 int main() {
 	char custOrStaff;
-	bool exitProgram = false;
 	
-	while (exitProgram == false) {
+	while (isTerminate == false) {
 		system("cls");
 		cout << "+--------------------------------------+" << endl;
 		cout << "|          WELCOME TO KSHOPPE          |" << endl;
 		cout << "+--------------------------------------+" << endl;
-		cout << "|      ( )         [ ]        |\\/|     |" << endl;
-		cout << "|      / \\         / \\        |/\\|     |" << endl;
-		cout << "| [1] Customer  [2] Staff   [3] Exit   |" << endl;
+		cout << "|         ( )             [ ]          |" << endl;
+		cout << "|         / \\             / \\          |" << endl;
+		cout << "|     [1] Customer      [2] Staff      |" << endl;
 		cout << "+--------------------------------------+" << endl;
 		cout << "            Enter key : ";
 		cin >> custOrStaff;
@@ -63,8 +66,6 @@ int main() {
 			custOp();
 		} else if (custOrStaff == '2') {
 			staffOp();
-		} else if (custOrStaff == '3') {
-			exitProgram = true;
 		} else {
 			inputErrorHandling();
 		}
@@ -725,6 +726,11 @@ void staffOp() { //---------------------------------------------- staffOp
 			addInfo();
 		} else if (keyStaff == 4) {
 			isStaff = false;
+		} else if (keyStaff == 5) {
+			bool termOrNot = terminateProgram();
+			if (termOrNot == true) {
+				isStaff = false;
+			}
 		} else {
 			inputErrorHandling();
 		}
@@ -740,6 +746,8 @@ void staffMenu() { //-------------------------------------------staffMenu
 	cout << "|   2. Statistics                      |" << endl;
 	cout << "|   3. Additional Info                 |" << endl;
 	cout << "|   4. Exit                            |" << endl;
+	cout << "+--------------------------------------+" << endl;
+	cout << "|  [5] Terminate Session               |" << endl;
 	cout << "+--------------------------------------+" << endl;
 }
 
@@ -959,20 +967,42 @@ void addInfo() { //------------------------------------------------addInfo
 	getch();
 }
 
-// ada beberapa part cam siap agi, tp ni gambaran awal la
-// yg tak buat agi,
-// 1) deduction jumlah stock lepas customer order barang tuh, astu
-//    update kat staff section -> stocks
-// 2) staff bole update stock barang
-// 3) bahagian statistics, cam sikit je
-// ... and sebenarnya saiz2 output tu aku buat scale kecik, mungkin
-// besarkan sikit kot
-// and mungkin ada algorithm yg macam tak necessary un, so kalau
-// korang ada cadangan nak improvekan algorithmnya, nnti suggest ah
-// ...again aku cakap, ni cuma idea je
-
-// 17/1/2023
-// Update inputPlease() kat pilihan2
-
-// 18/1/2023
-// set 'else' untuk pilihan2
+bool terminateProgram() {
+	system("cls");
+	int termKey;
+	bool goTerminate;
+	cout << "+--------------------------------------+" << endl;
+	cout << "|          SESSION TERMINATION         |" << endl;
+	cout << "+--------------------------------------+" << endl;
+	cout << "|   Are you sure? All saved data will  |" << endl;
+	cout << "|               lost...                |" << endl;
+	cout << "+--------------------------------------+" << endl;
+	cout << "     Press Enter to continue ";
+	getch();
+	system("cls");
+	cout << "+--------------------------------------+" << endl;
+	cout << "|          SESSION TERMINATION         |" << endl;
+	cout << "+--------------------------------------+" << endl;
+	cout << "    Enter key : ";
+	cin >> termKey;
+	if (termKey == terminateKey) {
+		system("cls");
+		cout << "+--------------------------------------+" << endl;
+		cout << "|          SESSION TERMINATED          |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		isTerminate = true;
+		goTerminate = true;
+	} else {
+		system("cls");
+		cout << "+--------------------------------------+" << endl;
+		cout << "|       Invalid termination key!       |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "|      Session termination failed!     |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "     Press Enter to continue ";
+		getch();
+		goTerminate = false;
+	}
+	return goTerminate;
+}
