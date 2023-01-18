@@ -10,7 +10,7 @@ using namespace std;
 char staffName[99][99] = {"Luqman", "Adib", "Zarif"}; // 3
 char staffPass[99][99] = {"luqman123", "adibudeen", "zash04"};
 char foodsList[99][99] = {"Nasi Minyak Ayam Kari", "Nasi Minyak Ayam Merah", "Mee Kari", "Nasi Kandar"}; // 4
-int foodsQty[99] = {0, 10, 10, 10};
+int foodsQty[99] = {10, 10, 10, 10};
 float foodsPrice[99] = {7.00, 7.00, 6.00, 8.00};
 char drinksList[99][99] = {"Milo Kotak", "Jagung Susu", "Air Kosong"}; // 3
 int drinksQty[99] = {10, 10, 10};
@@ -35,10 +35,12 @@ void drinksMenu();
 void iceCreamMenu();
 void custPayment(float totalMoneyThatCustNeedToPay, char whereItemGo); //-------- custPayment
 void fpxPayment(float money);
-void stocks();
 void itemGoodsInfo();
 void statistics();
 void addInfo();
+void viewStocks();
+void updateStocks();
+void inputErrorHandling();
 
 //==================================== main =============================
 
@@ -61,8 +63,10 @@ int main() {
 			custOp();
 		} else if (custOrStaff == '2') {
 			staffOp();
-		} else {
+		} else if (custOrStaff == '3') {
 			exitProgram = true;
+		} else {
+			inputErrorHandling();
 		}
 	}
 }
@@ -121,20 +125,29 @@ void custOrder() { //------------------------------------------ custOrder
 	float totalPrice = 0;
 	char pickupMethod;
 	bool cartIsEmpty = true;
+	bool truePickupMethod = false;
 	
 	for (int i = 0; i < 99; i++) {
 		itemCart[i] = "0";
 	}
-	system("cls");
-	cout << "+--------------------------------------+" << endl;
-	cout << "|            PICKUP METHOD             |" << endl;
-	cout << "+--------------------------------------+" << endl;
-	cout << "|       / |--|           /==\\          |" << endl;
-	cout << "|       -o--o-           |__|          |" << endl;
-	cout << "|   [D] Delivery    [S] Self Pickup    |" << endl;
-	cout << "+--------------------------------------+" << endl;
-	cout << "     Choose your preference : ";
-	cin >> pickupMethod;
+	while (truePickupMethod != true) {
+		system("cls");
+		cout << "+--------------------------------------+" << endl;
+		cout << "|            PICKUP METHOD             |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "|       / |--|           /==\\          |" << endl;
+		cout << "|       -o--o-           |__|          |" << endl;
+		cout << "|   [D] Delivery    [S] Self Pickup    |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "     Choose your preference : ";
+		cin >> pickupMethod;
+		
+		if (pickupMethod == 'D' || pickupMethod == 'd' || pickupMethod == 'S' || pickupMethod == 's') {
+			truePickupMethod = true;
+		} else {
+			inputErrorHandling();
+		}
+	}
 	
 	while (isAdding == true) {
 		bool isEnough = false;
@@ -169,6 +182,8 @@ void custOrder() { //------------------------------------------ custOrder
 					cout << endl;
 					cout << "    Press Enter to continue ";
 					getch();
+				} else if (foodQty == 0) {
+					inputPlease();
 				} else {
 					for (int i = 0; i < 99; i++) {
 						cartIsEmpty = false;
@@ -185,6 +200,7 @@ void custOrder() { //------------------------------------------ custOrder
 							break;
 						}
 					}
+					foodsQty[orderKey-1] -= foodQty;
 				}
 			} else if (orderKey == 2) {
 				system("cls");
@@ -201,6 +217,8 @@ void custOrder() { //------------------------------------------ custOrder
 					cout << endl;
 					cout << "    Press Enter to continue ";
 					getch();
+				} else if (foodQty == 0) {
+					inputPlease();
 				} else {
 					isEnough = true;
 					cartIsEmpty = false;
@@ -217,6 +235,7 @@ void custOrder() { //------------------------------------------ custOrder
 							break;
 						}
 					}
+					foodsQty[orderKey-1] -= foodQty;
 				}
 			} else if (orderKey == 3) {
 				system("cls");
@@ -233,6 +252,8 @@ void custOrder() { //------------------------------------------ custOrder
 					cout << endl;
 					cout << "    Press Enter to continue ";
 					getch();
+				} else if (foodQty == 0) {
+					inputPlease();
 				} else {
 					isEnough = true;
 					cartIsEmpty = false;
@@ -249,6 +270,7 @@ void custOrder() { //------------------------------------------ custOrder
 							break;
 						}
 					}
+					foodsQty[orderKey-1] -= foodQty;
 				}
 			} else if (orderKey == 4) {
 				system("cls");
@@ -265,6 +287,8 @@ void custOrder() { //------------------------------------------ custOrder
 					cout << endl;
 					cout << "    Press Enter to continue ";
 					getch();
+				} else if (foodQty == 0) {
+					inputPlease();
 				} else {
 					isEnough = true;
 					cartIsEmpty = false;
@@ -281,7 +305,10 @@ void custOrder() { //------------------------------------------ custOrder
 							break;
 						}
 					}
+					foodsQty[orderKey-1] -= foodQty;
 				}
+			} else {
+				inputErrorHandling();
 			}
 		} else if (category == '2') {
 			system("cls");
@@ -307,6 +334,8 @@ void custOrder() { //------------------------------------------ custOrder
 					cout << endl;
 					cout << "    Press Enter to continue ";
 					getch();
+				} else if (drinksQuantity == 0) {
+					inputPlease();
 				} else {
 					isEnough = true;
 					cartIsEmpty = false;
@@ -323,6 +352,7 @@ void custOrder() { //------------------------------------------ custOrder
 							break;
 						}
 					}
+					drinksQty[orderKey-1] -= drinksQuantity;
 				}
 			} else if (orderKey == 2) {
 				system("cls");
@@ -339,6 +369,8 @@ void custOrder() { //------------------------------------------ custOrder
 					cout << endl;
 					cout << "    Press Enter to continue ";
 					getch();
+				} else if (drinksQuantity == 0) {
+					inputPlease();
 				} else {
 					isEnough = true;
 					cartIsEmpty = false;
@@ -355,6 +387,7 @@ void custOrder() { //------------------------------------------ custOrder
 							break;
 						}
 					}
+					drinksQty[orderKey-1] -= drinksQuantity;
 				}
 			} else if (orderKey == 3) {
 				system("cls");
@@ -371,6 +404,8 @@ void custOrder() { //------------------------------------------ custOrder
 					cout << endl;
 					cout << "    Press Enter to continue ";
 					getch();
+				} else if (drinksQuantity == 0) {
+					inputPlease();
 				} else {
 					isEnough = true;
 					cartIsEmpty = false;
@@ -387,8 +422,10 @@ void custOrder() { //------------------------------------------ custOrder
 							break;
 						}
 					}
-				}
-				
+					drinksQty[orderKey-1] -= drinksQuantity;
+				}	
+			} else {
+				inputErrorHandling();
 			}
 		} else if (category == '3') {
 			system("cls");
@@ -414,6 +451,8 @@ void custOrder() { //------------------------------------------ custOrder
 					cout << endl;
 					cout << "    Press Enter to continue ";
 					getch();
+				} else if (iceCreamQuantity == 0) {
+					inputPlease();
 				} else {
 					isEnough = true;
 					cartIsEmpty = false;
@@ -430,6 +469,7 @@ void custOrder() { //------------------------------------------ custOrder
 							break;
 						}
 					}
+					iceCreamQty[orderKey-1] -= iceCreamQuantity;
 				}
 			} else if (orderKey == 2) {
 				system("cls");
@@ -446,6 +486,8 @@ void custOrder() { //------------------------------------------ custOrder
 					cout << endl;
 					cout << "    Press Enter to continue ";
 					getch();
+				} else if (iceCreamQuantity == 0) {
+					inputPlease();
 				} else {
 					isEnough = true;
 					cartIsEmpty = false;
@@ -462,6 +504,7 @@ void custOrder() { //------------------------------------------ custOrder
 							break;
 						}
 					}
+					iceCreamQty[orderKey-1] -= iceCreamQuantity;
 				}
 			} else if (orderKey == 3) {
 				system("cls");
@@ -496,8 +539,13 @@ void custOrder() { //------------------------------------------ custOrder
 							break;
 						}
 					}
+					iceCreamQty[orderKey-1] -= iceCreamQuantity;
 				}
+			} else {
+				inputErrorHandling();
 			}
+		} else {
+			inputErrorHandling();
 		}
 		if (isEnough == true) {
 			char isContinue = 'Y';
@@ -613,18 +661,28 @@ void fpxPayment(float money) { //-----------------------------------fpxPayment
 	}
 }
 
-void noStock() {
+void noStock() { //-----------------------------------------------noStock
 	system("cls");
 	cout << "+--------------------------------------+" << endl;
 	cout << "|       Sorry, Item Out Of Stock!      |" << endl;
 	cout << "+--------------------------------------+" << endl;
 }
 
-void inputPlease() {
+void inputErrorHandling() {
+	cout << "+--------------------------------------+" << endl;
+	cout << "|            Invalid input!            |" << endl;
+	cout << "+--------------------------------------+" << endl;
+	cout << "      Press Enter to continue ";
+	getch();
+}
+
+void inputPlease() { //-----------------------------------------inputPlease
 	system("cls");
 	cout << "+--------------------------------------+" << endl;
 	cout << "|        Please input amount!          |" << endl;
 	cout << "+--------------------------------------+" << endl;
+	cout << "      Press Enter to continue ";
+	getch();
 }
 
 // FUNCTION (STAFF)
@@ -637,13 +695,38 @@ void staffOp() { //---------------------------------------------- staffOp
 		cout << "    Enter key : ";
 		cin >> keyStaff;
 		if (keyStaff == 1) {
-			stocks();
+			int keyStocks;
+			bool isKeyStocks = false;
+			while (isKeyStocks == false) {
+				system("cls");
+				cout << "+--------------------------------------+" << endl;
+				cout << "|                STOCKS                |" << endl;
+				cout << "+--------------------------------------+" << endl;
+				cout << "|       [===]              =\\==        |" << endl;
+				cout << "|       [===]              ==\\=        |" << endl;
+				cout << "|  [1] View Stocks  [2] Update Stocks  |" << endl;
+				cout << "+--------------------------------------+" << endl;
+				cout << "          Enter key : ";
+				cin >> keyStocks;
+				if (keyStocks == 1 || keyStocks == 2) {
+					isKeyStocks = true;
+				} else {
+					inputErrorHandling();
+				}
+			}
+			if (keyStocks == 1) {
+				viewStocks();
+			} else if (keyStocks == 2) {
+				updateStocks();
+			}
 		} else if (keyStaff == 2) {
 			statistics();
 		} else if (keyStaff == 3) {
 			addInfo();
 		} else if (keyStaff == 4) {
 			isStaff = false;
+		} else {
+			inputErrorHandling();
 		}
 	}
 }
@@ -677,22 +760,44 @@ bool staffLogin() { //------------------------------------------staffLogin
 			trueStaff = true;
 		}
 	}
+	if (trueStaff == true) {
+		cout << "+--------------------------------------+" << endl;
+		cout << "|        Logged in successfully!       |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "       Press Enter to continue ";
+		getch();
+	} else {
+		cout << "+--------------------------------------+" << endl;
+		cout << "|    Invalid username or password!     |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "       Press Enter to continue ";
+		getch();
+	}
 	
 	return trueStaff;
 }
 
-void stocks() { //----------------------------------------------stocks
-	system("cls");
+void viewStocks() { //------------------------------------------viewStocks
 	int stocksKey;
-	cout << "+--------------------------------------+" << endl;
-	cout << "|                STOCKS                |" << endl;
-	cout << "+--------------------------------------+" << endl;
-	cout << "|   ooo          [ ]           Oo      |" << endl;
-	cout << "|  \\___/         [ ]           \\/      |" << endl;
-	cout << "|[1] Foods   [2] Drinks  [3] Ice Cream |" << endl;
-	cout << "+--------------------------------------+" << endl;
-	cout << "Choose category : ";
-	cin >> stocksKey;
+	bool isKey = false;
+	while (isKey == false) {
+		system("cls");
+		cout << "+--------------------------------------+" << endl;
+		cout << "|             VIEW STOCKS              |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "|   ooo          [ ]           Oo      |" << endl;
+		cout << "|  \\___/         [ ]           \\/      |" << endl;
+		cout << "|[1] Foods   [2] Drinks  [3] Ice Cream |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "    Choose category : ";
+		cin >> stocksKey;
+		
+		if (stocksKey == 1 || stocksKey == 2 || stocksKey == 3) {
+			isKey = true;
+		} else {
+			inputErrorHandling();
+		}
+	}
 	if (stocksKey == 1) {
 		system("cls");
 		cout << "+--------------------------------------+" << endl;
@@ -704,6 +809,8 @@ void stocks() { //----------------------------------------------stocks
 			cout << "+--------------------------------------+" << endl;
 		}
 		cout << endl;
+		cout << "    Press Enter to Continue ";
+		getch();
 	} else if (stocksKey == 2) {
 		system("cls");
 		cout << "+--------------------------------------+" << endl;
@@ -715,7 +822,9 @@ void stocks() { //----------------------------------------------stocks
 			cout << "+--------------------------------------+" << endl;
 		}
 		cout << endl;
-	} else if (stocksKey == 3) {
+		cout << "    Press Enter to Continue ";
+		getch();
+	} else {
 		system("cls");
 		cout << "+--------------------------------------+" << endl;
 		cout << "|          STOCKS => ICE CREAM         |" << endl;
@@ -726,8 +835,89 @@ void stocks() { //----------------------------------------------stocks
 			cout << "+--------------------------------------+" << endl;
 		}
 		cout << endl;
+		cout << "    Press Enter to Continue ";
+		getch();
 	}
-	cout << "    Press Enter to Continue";
+}
+
+void updateStocks() { //---------------------------------------updateStocks
+	int stocksKey;
+	bool isKey = false;
+	while (isKey == false) {
+		system("cls");
+		cout << "+--------------------------------------+" << endl;
+		cout << "|            UPDATE STOCKS             |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "|   ooo          [ ]           Oo      |" << endl;
+		cout << "|  \\___/         [ ]           \\/      |" << endl;
+		cout << "|[1] Foods   [2] Drinks  [3] Ice Cream |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "    Choose category : ";
+		cin >> stocksKey;
+		
+		if (stocksKey == 1 || stocksKey == 2 || stocksKey == 3) {
+			isKey = true;
+		} else {
+			inputErrorHandling();
+		}
+	}
+	if (stocksKey == 1) {
+		system("cls");
+		int selectionKey, newVal;
+		cout << "+--------------------------------------+" << endl;
+		cout << "|          STOCKS => FOODS             |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		for (int i = 0; i < 4; i++) {
+			cout << "    " << i+1 << ". " << foodsList[i] << endl;
+			cout << "    Stocks : " << foodsQty[i] << endl;
+			cout << "+--------------------------------------+" << endl;
+		}
+		cout << endl;
+		cout << "    Choose item to be update : ";
+		cin >> selectionKey;
+		cout << "    Input new value : ";
+		cin >> newVal;
+		foodsQty[selectionKey-1] = newVal;
+	} else if (stocksKey == 2) {
+		system("cls");
+		int selectionKey, newVal;
+		cout << "+--------------------------------------+" << endl;
+		cout << "|          STOCKS => DRINKS            |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		for (int i = 0; i < 3; i++) {
+			cout << "    " << i+1 << ". " << drinksList[i] << endl;
+			cout << "    Stocks : " << drinksQty[i] << endl;
+			cout << "+--------------------------------------+" << endl;
+		}
+		cout << endl;
+		cout << "    Choose item to be update : ";
+		cin >> selectionKey;
+		cout << "    Input new value : ";
+		cin >> newVal;
+		drinksQty[selectionKey-1] = newVal;
+	} else if (stocksKey == 3) {
+		system("cls");
+		int selectionKey, newVal;
+		cout << "+--------------------------------------+" << endl;
+		cout << "|          STOCKS => ICE CREAM         |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		for (int i = 0; i < 3; i++) {
+			cout << " " << i+1 << ". " << iceCreamList[i] << endl;
+			cout << " Stocks : " << iceCreamQty[i] << endl;
+			cout << "+--------------------------------------+" << endl;
+		}
+		cout << endl;
+		cout << "    Choose item to be update : ";
+		cin >> selectionKey;
+		cout << "    Input new value : ";
+		cin >> newVal;
+		iceCreamQty[selectionKey-1] = newVal;
+	}
+	system("cls");
+	cout << "+--------------------------------------+" << endl;
+	cout << "|        STOCK HAS BEEN UPDATED        |" << endl;
+	cout << "+--------------------------------------+" << endl;
+	cout << "    Press Enter to Continue ";
 	getch();
 }
 
@@ -747,6 +937,9 @@ void statistics() { //-------------------------------------------statistics
 	}
 	cout << "|   Total payment : RM " << moneyFromCust << endl;
 	cout << "|" << endl;
+	cout << "+--------------------------------------+" << endl;
+	cout << "|   Average : RM " << moneyFromCust/totalCust << endl;
+	cout << "|   " << endl;
 	cout << "+--------------------------------------+" << endl;
 	cout << "    Press Enter to continue ";
 	getch();
@@ -780,3 +973,6 @@ void addInfo() { //------------------------------------------------addInfo
 
 // 17/1/2023
 // Update inputPlease() kat pilihan2
+
+// 18/1/2023
+// set 'else' untuk pilihan2
