@@ -22,6 +22,8 @@ int totalCust = 0;
 float paymentList[99] = {};
 bool isTerminate = false;
 int terminateKey = 90271;
+string custCollegeType[99] = {};
+string custRoomNumber[99] = {};
 
 //==================================== fn prototype =====================
 
@@ -45,6 +47,7 @@ void inputErrorHandling();
 void noStock();
 void inputPlease();
 bool terminateProgram();
+void deliveryInfo();
 
 //==================================== main =============================
 
@@ -579,6 +582,7 @@ void custOrder() { //------------------------------------------ custOrder
 		cout << "    Press Enter to continue ";
 		getch();
 		custPayment(totalPrice, pickupMethod);
+		paymentList[totalCust] = totalPrice;
 	}
 	
 }
@@ -602,7 +606,12 @@ void custPayment(float totalMoneyThatCustNeedToPay, char whereItemGo) { //------
 			cout << "+--------------------------------------+" << endl;
 			cout << "|      Checked Out Successfully!       |" << endl;
 			cout << "+--------------------------------------+" << endl;
-			sleep(3);
+			cout << "    Order Code : C" << totalCust << endl;
+			cout << "    Total amount : RM " << totalMoneyThatCustNeedToPay << endl;
+			cout << "    Thank you!" << endl;
+			cout << "+--------------------------------------+" << endl;
+			cout << "    Press Enter to continue ";
+			getch();
 		} else {
 			system("cls");
 			fpxPayment(totalMoneyThatCustNeedToPay);
@@ -612,18 +621,46 @@ void custPayment(float totalMoneyThatCustNeedToPay, char whereItemGo) { //------
 			sleep(3);
 		}
 	} else {
+		string kolejType;
+		string roomNumber;
+		cout << "+--------------------------------------+" << endl;
+		cout << "|         Enter your address :         |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "  1. Send to :" << endl;
+		cout << "   [KMK] Kolej Mat Kilau" << endl;
+		cout << "   [KTT] Kolej Tun Teja" << endl;
+		cout << "   [BS] Bangunan Sarjana" << endl;
+		cout << "   [BC] Bangunan Cendekiawan" << endl;
+		cout << endl;
+		cout << "  Enter : ";
+		cin >> kolejType;
+		cout << endl;
+		cout << "  2. Room Number" << endl;
+		cout << endl;
+		cout << "  Enter : ";
+		cin >> roomNumber;
+		custCollegeType[totalCust] = kolejType;
+		custRoomNumber[totalCust] = roomNumber;
 		fpxPayment(totalMoneyThatCustNeedToPay);
 		system("cls");
 		cout << "+--------------------------------------+" << endl;
 		cout << "|      Checked Out Successfully!       |" << endl;
 		cout << "+--------------------------------------+" << endl;
-		sleep(3);
+		cout << "    Order Code : C" << totalCust << endl;
+		cout << "    Total amount : RM " << totalMoneyThatCustNeedToPay << endl;
+		cout << "    Delivery address : " << endl;
+		cout << "       " << kolejType << "," << endl;
+		cout << "       " << roomNumber << endl;
+		cout << "    Thank you!" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "    Press Enter to continue ";
+		getch();
 	}
-	paymentList[totalCust] = totalMoneyThatCustNeedToPay;
 	totalCust = totalCust + 1;
 }
 
 void fpxPayment(float money) { //-----------------------------------fpxPayment
+	system("cls");
 	char bankKey;
 	cout << "+--------------------------------------+" << endl;
 	cout << "|              FPX GATEWAY             |" << endl;
@@ -967,7 +1004,7 @@ void addInfo() { //------------------------------------------------addInfo
 	getch();
 }
 
-bool terminateProgram() {
+bool terminateProgram() { //----------------------------------terminateProgram
 	system("cls");
 	int termKey;
 	bool goTerminate;
@@ -996,7 +1033,6 @@ bool terminateProgram() {
 		system("cls");
 		cout << "+--------------------------------------+" << endl;
 		cout << "|       Invalid termination key!       |" << endl;
-		cout << "+--------------------------------------+" << endl;
 		cout << "+--------------------------------------+" << endl;
 		cout << "|      Session termination failed!     |" << endl;
 		cout << "+--------------------------------------+" << endl;
