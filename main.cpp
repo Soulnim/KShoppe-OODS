@@ -27,7 +27,6 @@ string custRoomNumber[99] = {};
 
 //==================================== fn prototype =====================
 
-void custOp();
 void staffOp();
 void custMenu();
 void staffMenu();
@@ -55,6 +54,7 @@ int main() {
 	char custOrStaff;
 	
 	while (isTerminate == false) {
+		point0:
 		system("cls");
 		cout << "+--------------------------------------+" << endl;
 		cout << "|          WELCOME TO KSHOPPE          |" << endl;
@@ -66,7 +66,7 @@ int main() {
 		cout << "            Enter key : ";
 		cin >> custOrStaff;
 		if (custOrStaff == '1') {
-			custOp();
+			custOrder();
 		} else if (custOrStaff == '2') {
 			staffOp();
 		} else {
@@ -78,48 +78,6 @@ int main() {
 //=================================== fn def =============================
 
 // FUNCTION (CUSTOMER)
-
-void custOp() { //------------------------------------------------ custOp
-	custOrder();
-}
-
-void custMenu() { //---------------------------------------------custMenu
-	system("cls");
-	cout << "+--------------------------------------+" << endl;
-	cout << "|           K-SHOPPE ONLINE            |" << endl;
-	cout << "+--------------------------------------+" << endl;
-	cout << "|   ooo          [ ]           Oo      |" << endl;
-	cout << "|  \\___/         [ ]           \\/      |" << endl;
-	cout << "|[1] Foods   [2] Drinks  [3] Ice Cream |" << endl;
-	cout << "+--------------------------------------+" << endl;
-}
-
-void foodsMenu() { //--------------------------------------------foodsMenu
-	for (int i = 0; i < 4; i++) {
-		cout << "   " << i + 1 << ". " << foodsList[i] << endl;
-		cout << "   Price : RM " << foodsPrice[i] << " , Available : " << foodsQty[i] << endl;
-		cout << endl;
-		cout << "+--------------------------------------+" << endl;
-	}
-}
-
-void drinksMenu() { //------------------------------------------drinksMenu
-	for (int i = 0; i < 3; i++) {
-		cout << "    " << i + 1 << ". " << drinksList[i] << endl;
-		cout << "    Price : RM " << drinksPrice[i] << " , Available : " << drinksQty[i] << endl;
-		cout << endl;
-		cout << "+--------------------------------------+" << endl;
-	}
-}
-
-void iceCreamMenu() { //--------------------------------------iceCreamMenu
-	for (int i = 0; i < 3; i++) {
-		cout << "    " << i + 1 << ". " << iceCreamList[i] << endl;
-		cout << "    Price : RM " << iceCreamPrice[i] << " , Available : " << iceCreamQty[i] << endl;
-		cout << endl;
-		cout << "+--------------------------------------+" << endl;
-	}
-}
 
 void custOrder() { //------------------------------------------ custOrder
 	string itemCart[99];
@@ -134,7 +92,9 @@ void custOrder() { //------------------------------------------ custOrder
 	for (int i = 0; i < 99; i++) {
 		itemCart[i] = "0";
 	}
+	
 	while (truePickupMethod != true) {
+		point1:
 		system("cls");
 		cout << "+--------------------------------------+" << endl;
 		cout << "|            PICKUP METHOD             |" << endl;
@@ -143,17 +103,23 @@ void custOrder() { //------------------------------------------ custOrder
 		cout << "|       -o--o-           |__|          |" << endl;
 		cout << "|   [D] Delivery    [S] Self Pickup    |" << endl;
 		cout << "+--------------------------------------+" << endl;
+		cout << "|             [0] Back                 |" << endl;
+		cout << "+--------------------------------------+" << endl;
 		cout << "     Choose your preference : ";
 		cin >> pickupMethod;
 		
 		if (pickupMethod == 'D' || pickupMethod == 'd' || pickupMethod == 'S' || pickupMethod == 's') {
 			truePickupMethod = true;
+		} else if (pickupMethod == '0') {
+			main();
 		} else {
 			inputErrorHandling();
+			truePickupMethod = false;
 		}
 	}
 	
 	while (isAdding == true) {
+		point2:
 		bool isEnough = false;
 		system("cls");
 		char category;
@@ -162,6 +128,7 @@ void custOrder() { //------------------------------------------ custOrder
 		cin >> category;
 		
 		if (category == '1') {
+			point3:
 			system("cls");
 			int orderKey;
 			cout << "+--------------------------------------+" << endl;
@@ -170,24 +137,24 @@ void custOrder() { //------------------------------------------ custOrder
 			foodsMenu();
 			cout << "    Choose your food : ";
 			cin >> orderKey;
-			if (orderKey == 1) {
+			if (orderKey >= 1 && orderKey <= 4) {
 				system("cls");
 				int foodQty;
 				cout << "+--------------------------------------+" << endl;
-				cout << "| NASI MINYAK AYAM KARI        RM 7.00 |" << endl;
-				cout << "|       ooo                            |" << endl;
-				cout << "|      \\___/                           |" << endl;
+				cout << "  " << foodsList[orderKey-1] << endl;
+				cout << "  Price : RM " << foodsPrice[orderKey-1] << endl;
+				cout << "        ooo                            |" << endl;
+				cout << "       \\___/                           |" << endl;
+				cout << "+--------------------------------------+" << endl;
+				cout << "|             [0] Back                 |" << endl;
 				cout << "+--------------------------------------+" << endl;
 				cout << "          Enter quantity : ";
 				cin >> foodQty;
 				// check for stock
 				if (foodsQty[orderKey-1] - foodQty  < 0) {
 					noStock();
-					cout << endl;
-					cout << "    Press Enter to continue ";
-					getch();
 				} else if (foodQty == 0) {
-					inputPlease();
+					goto point3;
 				} else {
 					for (int i = 0; i < 99; i++) {
 						cartIsEmpty = false;
@@ -206,115 +173,13 @@ void custOrder() { //------------------------------------------ custOrder
 					}
 					foodsQty[orderKey-1] -= foodQty;
 				}
-			} else if (orderKey == 2) {
-				system("cls");
-				int foodQty;
-				cout << "+--------------------------------------+" << endl;
-				cout << "| NASI MINYAK AYAM MERAH       RM 7.00 |" << endl;
-				cout << "|       ooo                            |" << endl;
-				cout << "|      \\___/                           |" << endl;
-				cout << "+--------------------------------------+" << endl;
-				cout << "          Enter quantity : ";
-				cin >> foodQty;
-				if (foodsQty[orderKey-1] - foodQty  < 0) {
-					noStock();
-					cout << endl;
-					cout << "    Press Enter to continue ";
-					getch();
-				} else if (foodQty == 0) {
-					inputPlease();
-				} else {
-					isEnough = true;
-					cartIsEmpty = false;
-					for (int i = 0; i < 99; i++) {
-						if (itemCart[i] == "0") {
-							itemCart[i] = foodsList[orderKey-1];
-							itemPrice[i] = foodsPrice[orderKey-1];
-							itemQty[i] = foodQty;
-							system("cls");
-							cout << "+--------------------------------------+" << endl;
-							cout << "|   Item successfully added to cart!   |" << endl;
-							cout << "+--------------------------------------+" << endl;
-							sleep(2);
-							break;
-						}
-					}
-					foodsQty[orderKey-1] -= foodQty;
-				}
-			} else if (orderKey == 3) {
-				system("cls");
-				int foodQty;
-				cout << "+--------------------------------------+" << endl;
-				cout << "| MEE KARI                     RM 7.00 |" << endl;
-				cout << "|       ~~~                            |" << endl;
-				cout << "|      \\___/                           |" << endl;
-				cout << "+--------------------------------------+" << endl;
-				cout << "          Enter quantity : ";
-				cin >> foodQty;
-				if (foodsQty[orderKey-1] - foodQty  < 0) {
-					noStock();
-					cout << endl;
-					cout << "    Press Enter to continue ";
-					getch();
-				} else if (foodQty == 0) {
-					inputPlease();
-				} else {
-					isEnough = true;
-					cartIsEmpty = false;
-					for (int i = 0; i < 99; i++) {
-						if (itemCart[i] == "0") {
-							itemCart[i] = foodsList[orderKey-1];
-							itemPrice[i] = foodsPrice[orderKey-1];
-							itemQty[i] = foodQty;
-							system("cls");
-							cout << "+--------------------------------------+" << endl;
-							cout << "|   Item successfully added to cart!   |" << endl;
-							cout << "+--------------------------------------+" << endl;
-							sleep(2);
-							break;
-						}
-					}
-					foodsQty[orderKey-1] -= foodQty;
-				}
-			} else if (orderKey == 4) {
-				system("cls");
-				int foodQty;
-				cout << "+--------------------------------------+" << endl;
-				cout << "| NASI KANDAR                  RM 7.00 |" << endl;
-				cout << "|       ooo                            |" << endl;
-				cout << "|      \\___/                           |" << endl;
-				cout << "+--------------------------------------+" << endl;
-				cout << "          Enter quantity : ";
-				cin >> foodQty;
-				if (foodsQty[orderKey-1] - foodQty  < 0) {
-					noStock();
-					cout << endl;
-					cout << "    Press Enter to continue ";
-					getch();
-				} else if (foodQty == 0) {
-					inputPlease();
-				} else {
-					isEnough = true;
-					cartIsEmpty = false;
-					for (int i = 0; i < 99; i++) {
-						if (itemCart[i] == "0") {
-							itemCart[i] = foodsList[orderKey-1];
-							itemPrice[i] = foodsPrice[orderKey-1];
-							itemQty[i] = foodQty;
-							system("cls");
-							cout << "+--------------------------------------+" << endl;
-							cout << "|   Item successfully added to cart!   |" << endl;
-							cout << "+--------------------------------------+" << endl;
-							sleep(2);
-							break;
-						}
-					}
-					foodsQty[orderKey-1] -= foodQty;
-				}
+			} else if (orderKey == 0) {
+				goto point2;
 			} else {
 				inputErrorHandling();
 			}
 		} else if (category == '2') {
+			point4:
 			system("cls");
 			int orderKey;
 			cout << "+--------------------------------------+" << endl;
@@ -327,19 +192,19 @@ void custOrder() { //------------------------------------------ custOrder
 				system("cls");
 				int drinksQuantity;
 				cout << "+--------------------------------------+" << endl;
-				cout << "| MILO KOTAK                   RM 7.00 |" << endl;
-				cout << "|     [ ]                              |" << endl;
-				cout << "|     [ ]                              |" << endl;
+				cout << "  " << drinksList[orderKey-1] << endl;
+				cout << "  Price : RM " << drinksPrice[orderKey-1] << endl;
+				cout << "      [ ]                              |" << endl;
+				cout << "      [ ]                              |" << endl;
+				cout << "+--------------------------------------+" << endl;
+				cout << "|             [0] Back                 |" << endl;
 				cout << "+--------------------------------------+" << endl;
 				cout << "          Enter quantity : ";
 				cin >> drinksQuantity;
 				if (drinksQty[orderKey-1] - drinksQuantity  < 0) {
 					noStock();
-					cout << endl;
-					cout << "    Press Enter to continue ";
-					getch();
 				} else if (drinksQuantity == 0) {
-					inputPlease();
+					goto point4;
 				} else {
 					isEnough = true;
 					cartIsEmpty = false;
@@ -357,81 +222,14 @@ void custOrder() { //------------------------------------------ custOrder
 						}
 					}
 					drinksQty[orderKey-1] -= drinksQuantity;
-				}
-			} else if (orderKey == 2) {
-				system("cls");
-				int drinksQuantity;
-				cout << "+--------------------------------------+" << endl;
-				cout << "| JAGUNG SUSU                  RM 7.00 |" << endl;
-				cout << "|     [ ]                              |" << endl;
-				cout << "|     [ ]                              |" << endl;
-				cout << "+--------------------------------------+" << endl;
-				cout << "          Enter quantity : ";
-				cin >> drinksQuantity;
-				if (drinksQty[orderKey-1] - drinksQuantity  < 0) {
-					noStock();
-					cout << endl;
-					cout << "    Press Enter to continue ";
-					getch();
-				} else if (drinksQuantity == 0) {
-					inputPlease();
-				} else {
-					isEnough = true;
-					cartIsEmpty = false;
-					for (int i = 0; i < 99; i++) {
-						if (itemCart[i] == "0") {
-							itemCart[i] = drinksList[orderKey-1];
-							itemPrice[i] = drinksPrice[orderKey-1];
-							itemQty[i] = drinksQuantity;
-							system("cls");
-							cout << "+--------------------------------------+" << endl;
-							cout << "|   Item successfully added to cart!   |" << endl;
-							cout << "+--------------------------------------+" << endl;
-							sleep(2);
-							break;
-						}
-					}
-					drinksQty[orderKey-1] -= drinksQuantity;
-				}
-			} else if (orderKey == 3) {
-				system("cls");
-				int drinksQuantity;
-				cout << "+--------------------------------------+" << endl;
-				cout << "| AIR KOSONG                   RM 7.00 |" << endl;
-				cout << "|     [ ]                              |" << endl;
-				cout << "|     [ ]                              |" << endl;
-				cout << "+--------------------------------------+" << endl;
-				cout << "          Enter quantity : ";
-				cin >> drinksQuantity;
-				if (drinksQty[orderKey-1] - drinksQuantity  < 0) {
-					noStock();
-					cout << endl;
-					cout << "    Press Enter to continue ";
-					getch();
-				} else if (drinksQuantity == 0) {
-					inputPlease();
-				} else {
-					isEnough = true;
-					cartIsEmpty = false;
-					for (int i = 0; i < 99; i++) {
-						if (itemCart[i] == "0") {
-							itemCart[i] = drinksList[orderKey-1];
-							itemPrice[i] = drinksPrice[orderKey-1];
-							itemQty[i] = drinksQuantity;
-							system("cls");
-							cout << "+--------------------------------------+" << endl;
-							cout << "|   Item successfully added to cart!   |" << endl;
-							cout << "+--------------------------------------+" << endl;
-							sleep(2);
-							break;
-						}
-					}
-					drinksQty[orderKey-1] -= drinksQuantity;
-				}	
+				} 	
+			} else if (orderKey == 0) {
+				goto point2;
 			} else {
 				inputErrorHandling();
 			}
 		} else if (category == '3') {
+			point5:
 			system("cls");
 			int orderKey;
 			cout << "+--------------------------------------+" << endl;
@@ -444,19 +242,19 @@ void custOrder() { //------------------------------------------ custOrder
 				system("cls");
 				int iceCreamQuantity;
 				cout << "+--------------------------------------+" << endl;
-				cout << "| MAGNOLIA                     RM 7.00 |" << endl;
-				cout << "|    O                                 |" << endl;
-				cout << "|    \\/                                |" << endl;
+				cout << "  " << iceCreamList[orderKey-1] << endl;
+				cout << "  Price : RM " << iceCreamPrice[orderKey-1] << endl;
+				cout << "     O                                 |" << endl;
+				cout << "     \\/                                |" << endl;
+				cout << "+--------------------------------------+" << endl;
+				cout << "|             [0] Back                 |" << endl;
 				cout << "+--------------------------------------+" << endl;
 				cout << "          Enter quantity : ";
 				cin >> iceCreamQuantity;
 				if (drinksQty[orderKey-1] - iceCreamQuantity  < 0) {
 					noStock();
-					cout << endl;
-					cout << "    Press Enter to continue ";
-					getch();
 				} else if (iceCreamQuantity == 0) {
-					inputPlease();
+					goto point5;
 				} else {
 					isEnough = true;
 					cartIsEmpty = false;
@@ -475,79 +273,13 @@ void custOrder() { //------------------------------------------ custOrder
 					}
 					iceCreamQty[orderKey-1] -= iceCreamQuantity;
 				}
-			} else if (orderKey == 2) {
-				system("cls");
-				int iceCreamQuantity;
-				cout << "+--------------------------------------+" << endl;
-				cout << "| ESKEM MESIA                  RM 7.00 |" << endl;
-				cout << "|    O                                 |" << endl;
-				cout << "|    \\/                                |" << endl;
-				cout << "+--------------------------------------+" << endl;
-				cout << "          Enter quantity : ";
-				cin >> iceCreamQuantity;
-				if (drinksQty[orderKey-1] - iceCreamQuantity  < 0) {
-					noStock();
-					cout << endl;
-					cout << "    Press Enter to continue ";
-					getch();
-				} else if (iceCreamQuantity == 0) {
-					inputPlease();
-				} else {
-					isEnough = true;
-					cartIsEmpty = false;
-					for (int i = 0; i < 99; i++) {
-						if (itemCart[i] == "0") {
-							itemCart[i] = iceCreamList[orderKey-1];
-							itemPrice[i] = iceCreamPrice[orderKey-1];
-							itemQty[i] = iceCreamQuantity;
-							system("cls");
-							cout << "+--------------------------------------+" << endl;
-							cout << "|   Item successfully added to cart!   |" << endl;
-							cout << "+--------------------------------------+" << endl;
-							sleep(2);
-							break;
-						}
-					}
-					iceCreamQty[orderKey-1] -= iceCreamQuantity;
-				}
-			} else if (orderKey == 3) {
-				system("cls");
-				int iceCreamQuantity;
-				cout << "+--------------------------------------+" << endl;
-				cout << "| MAGNUM                       RM 7.00 |" << endl;
-				cout << "|    O                                 |" << endl;
-				cout << "|    \\/                                |" << endl;
-				cout << "+--------------------------------------+" << endl;
-				cout << "          Enter quantity : ";
-				cin >> iceCreamQuantity;
-				if (drinksQty[orderKey-1] - iceCreamQuantity  < 0) {
-					noStock();
-					cout << endl;
-					cout << "    Press Enter to continue ";
-					getch();
-				} else if (iceCreamQuantity == 0) {
-					inputPlease();
-				} else {
-					isEnough = true;
-					cartIsEmpty = false;
-					for (int i = 0; i < 99; i++) {
-						if (itemCart[i] == "0") {
-							itemCart[i] = iceCreamList[orderKey-1];
-							itemPrice[i] = iceCreamPrice[orderKey-1];
-							itemQty[i] = iceCreamQuantity;
-							system("cls");
-							cout << "+--------------------------------------+" << endl;
-							cout << "|   Item successfully added to cart!   |" << endl;
-							cout << "+--------------------------------------+" << endl;
-							sleep(2);
-							break;
-						}
-					}
-					iceCreamQty[orderKey-1] -= iceCreamQuantity;
-				}
+			} else if (orderKey == 0) {
+				goto point2;
 			} else {
 				inputErrorHandling();
 			}
+		} else if (category == '0') {
+			goto point1;
 		} else {
 			inputErrorHandling();
 		}
@@ -586,6 +318,54 @@ void custOrder() { //------------------------------------------ custOrder
 	}
 	
 }
+
+void custMenu() { //---------------------------------------------custMenu
+	system("cls");
+	cout << "+--------------------------------------+" << endl;
+	cout << "|           K-SHOPPE ONLINE            |" << endl;
+	cout << "+--------------------------------------+" << endl;
+	cout << "|   ooo          [ ]           Oo      |" << endl;
+	cout << "|  \\___/         [ ]           \\/      |" << endl;
+	cout << "|[1] Foods   [2] Drinks  [3] Ice Cream |" << endl;
+	cout << "+--------------------------------------+" << endl;
+	cout << "|             [0] Back                 |" << endl;
+	cout << "+--------------------------------------+" << endl;
+}
+
+void foodsMenu() { //--------------------------------------------foodsMenu
+	for (int i = 0; i < 4; i++) {
+		cout << "   " << i + 1 << ". " << foodsList[i] << endl;
+		cout << "   Price : RM " << foodsPrice[i] << " , Available : " << foodsQty[i] << endl;
+		cout << endl;
+		cout << "+--------------------------------------+" << endl;
+	}
+	cout << "|             [0] Back                 |" << endl;
+	cout << "+--------------------------------------+" << endl;
+}
+
+void drinksMenu() { //------------------------------------------drinksMenu
+	for (int i = 0; i < 3; i++) {
+		cout << "    " << i + 1 << ". " << drinksList[i] << endl;
+		cout << "    Price : RM " << drinksPrice[i] << " , Available : " << drinksQty[i] << endl;
+		cout << endl;
+		cout << "+--------------------------------------+" << endl;
+	}
+	cout << "|             [0] Back                 |" << endl;
+	cout << "+--------------------------------------+" << endl;
+}
+
+void iceCreamMenu() { //--------------------------------------iceCreamMenu
+	for (int i = 0; i < 3; i++) {
+		cout << "    " << i + 1 << ". " << iceCreamList[i] << endl;
+		cout << "    Price : RM " << iceCreamPrice[i] << " , Available : " << iceCreamQty[i] << endl;
+		cout << endl;
+		cout << "+--------------------------------------+" << endl;
+	}
+	cout << "|             [0] Back                 |" << endl;
+	cout << "+--------------------------------------+" << endl;
+}
+
+
 
 void custPayment(float totalMoneyThatCustNeedToPay, char whereItemGo) { //-------- custPayment
 	system("cls");
@@ -704,6 +484,8 @@ void noStock() { //-----------------------------------------------noStock
 	cout << "+--------------------------------------+" << endl;
 	cout << "|       Sorry, Item Out Of Stock!      |" << endl;
 	cout << "+--------------------------------------+" << endl;
+	cout << "      Press Enter to continue ";
+	getch();
 }
 
 void inputErrorHandling() {
@@ -743,6 +525,8 @@ void staffOp() { //---------------------------------------------- staffOp
 				cout << "|       [===]              =\\==        |" << endl;
 				cout << "|       [===]              ==\\=        |" << endl;
 				cout << "|  [1] View Stocks  [2] Update Stocks  |" << endl;
+				cout << "+--------------------------------------+" << endl;
+				cout << "|             [0] Back                 |" << endl;
 				cout << "+--------------------------------------+" << endl;
 				cout << "          Enter key : ";
 				cin >> keyStocks;
@@ -833,6 +617,8 @@ void viewStocks() { //------------------------------------------viewStocks
 		cout << "|   ooo          [ ]           Oo      |" << endl;
 		cout << "|  \\___/         [ ]           \\/      |" << endl;
 		cout << "|[1] Foods   [2] Drinks  [3] Ice Cream |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "|             [0] Back                 |" << endl;
 		cout << "+--------------------------------------+" << endl;
 		cout << "    Choose category : ";
 		cin >> stocksKey;
