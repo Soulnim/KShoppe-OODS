@@ -24,6 +24,7 @@ bool isTerminate = false;
 int terminateKey = 90271;
 string custCollegeType[99] = {};
 string custRoomNumber[99] = {};
+bool isStaff = false;
 
 //==================================== fn prototype =====================
 
@@ -47,6 +48,7 @@ void noStock();
 void inputPlease();
 bool terminateProgram();
 void deliveryInfo();
+void stocksOp();
 
 //==================================== main =============================
 
@@ -188,7 +190,7 @@ void custOrder() { //------------------------------------------ custOrder
 			drinksMenu();
 			cout << "    Choose your drinks : ";
 			cin >> orderKey;
-			if (orderKey == 1) {
+			if (orderKey >= 1 && orderKey <= 3) {
 				system("cls");
 				int drinksQuantity;
 				cout << "+--------------------------------------+" << endl;
@@ -238,7 +240,7 @@ void custOrder() { //------------------------------------------ custOrder
 			iceCreamMenu();
 			cout << "     Choose your ice cream : ";
 			cin >> orderKey;
-			if (orderKey == 1) {
+			if (orderKey >= 1 && orderKey <= 3) {
 				system("cls");
 				int iceCreamQuantity;
 				cout << "+--------------------------------------+" << endl;
@@ -508,45 +510,23 @@ void inputPlease() { //-----------------------------------------inputPlease
 // FUNCTION (STAFF)
 
 void staffOp() { //---------------------------------------------- staffOp
-	bool isStaff = staffLogin();
+	if (isStaff != true) {
+		isStaff = staffLogin();
+	}
 	while (isStaff == true) {
 		int keyStaff;
 		staffMenu();
 		cout << "    Enter key : ";
 		cin >> keyStaff;
 		if (keyStaff == 1) {
-			int keyStocks;
-			bool isKeyStocks = false;
-			while (isKeyStocks == false) {
-				system("cls");
-				cout << "+--------------------------------------+" << endl;
-				cout << "|                STOCKS                |" << endl;
-				cout << "+--------------------------------------+" << endl;
-				cout << "|       [===]              =\\==        |" << endl;
-				cout << "|       [===]              ==\\=        |" << endl;
-				cout << "|  [1] View Stocks  [2] Update Stocks  |" << endl;
-				cout << "+--------------------------------------+" << endl;
-				cout << "|             [0] Back                 |" << endl;
-				cout << "+--------------------------------------+" << endl;
-				cout << "          Enter key : ";
-				cin >> keyStocks;
-				if (keyStocks == 1 || keyStocks == 2) {
-					isKeyStocks = true;
-				} else {
-					inputErrorHandling();
-				}
-			}
-			if (keyStocks == 1) {
-				viewStocks();
-			} else if (keyStocks == 2) {
-				updateStocks();
-			}
+			stocksOp();
 		} else if (keyStaff == 2) {
 			statistics();
 		} else if (keyStaff == 3) {
 			addInfo();
 		} else if (keyStaff == 4) {
 			isStaff = false;
+			main();
 		} else if (keyStaff == 5) {
 			bool termOrNot = terminateProgram();
 			if (termOrNot == true) {
@@ -555,6 +535,37 @@ void staffOp() { //---------------------------------------------- staffOp
 		} else {
 			inputErrorHandling();
 		}
+	}
+}
+
+void stocksOp() {
+	int keyStocks;
+	bool isKeyStocks = false;
+	while (isKeyStocks == false) {
+		system("cls");
+		cout << "+--------------------------------------+" << endl;
+		cout << "|                STOCKS                |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "|       [===]              =\\==        |" << endl;
+		cout << "|       [===]              ==\\=        |" << endl;
+		cout << "|  [1] View Stocks  [2] Update Stocks  |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "|             [0] Back                 |" << endl;
+		cout << "+--------------------------------------+" << endl;
+		cout << "          Enter key : ";
+		cin >> keyStocks;
+		if (keyStocks == 1 || keyStocks == 2) {
+			isKeyStocks = true;
+		} else if (keyStocks == 0) {
+			staffOp();
+		} else {
+			inputErrorHandling();
+		}
+	}
+	if (keyStocks == 1) {
+		viewStocks();
+	} else if (keyStocks == 2) {
+		updateStocks();
 	}
 }
 
@@ -625,6 +636,8 @@ void viewStocks() { //------------------------------------------viewStocks
 		
 		if (stocksKey == 1 || stocksKey == 2 || stocksKey == 3) {
 			isKey = true;
+		} else if (stocksKey == 0) {
+			stocksOp();
 		} else {
 			inputErrorHandling();
 		}
@@ -640,8 +653,9 @@ void viewStocks() { //------------------------------------------viewStocks
 			cout << "+--------------------------------------+" << endl;
 		}
 		cout << endl;
-		cout << "    Press Enter to Continue ";
+		cout << "    Press Enter to back ";
 		getch();
+		viewStocks();
 	} else if (stocksKey == 2) {
 		system("cls");
 		cout << "+--------------------------------------+" << endl;
@@ -653,8 +667,9 @@ void viewStocks() { //------------------------------------------viewStocks
 			cout << "+--------------------------------------+" << endl;
 		}
 		cout << endl;
-		cout << "    Press Enter to Continue ";
+		cout << "    Press Enter to back ";
 		getch();
+		viewStocks();
 	} else {
 		system("cls");
 		cout << "+--------------------------------------+" << endl;
@@ -666,8 +681,9 @@ void viewStocks() { //------------------------------------------viewStocks
 			cout << "+--------------------------------------+" << endl;
 		}
 		cout << endl;
-		cout << "    Press Enter to Continue ";
+		cout << "    Press Enter to back ";
 		getch();
+		viewStocks();
 	}
 }
 
@@ -683,11 +699,15 @@ void updateStocks() { //---------------------------------------updateStocks
 		cout << "|  \\___/         [ ]           \\/      |" << endl;
 		cout << "|[1] Foods   [2] Drinks  [3] Ice Cream |" << endl;
 		cout << "+--------------------------------------+" << endl;
+		cout << "|             [0] Back                 |" << endl;
+		cout << "+--------------------------------------+" << endl;
 		cout << "    Choose category : ";
 		cin >> stocksKey;
 		
 		if (stocksKey == 1 || stocksKey == 2 || stocksKey == 3) {
 			isKey = true;
+		} else if (stocksKey == 0) {
+			stocksOp();
 		} else {
 			inputErrorHandling();
 		}
@@ -703,9 +723,14 @@ void updateStocks() { //---------------------------------------updateStocks
 			cout << "    Stocks : " << foodsQty[i] << endl;
 			cout << "+--------------------------------------+" << endl;
 		}
+		cout << "|             [0] Back                 |" << endl;
+		cout << "+--------------------------------------+" << endl;
 		cout << endl;
 		cout << "    Choose item to be update : ";
 		cin >> selectionKey;
+		if (selectionKey == 0) {
+			updateStocks();
+		}
 		cout << "    Input new value : ";
 		cin >> newVal;
 		foodsQty[selectionKey-1] = newVal;
@@ -720,9 +745,14 @@ void updateStocks() { //---------------------------------------updateStocks
 			cout << "    Stocks : " << drinksQty[i] << endl;
 			cout << "+--------------------------------------+" << endl;
 		}
+		cout << "|             [0] Back                 |" << endl;
+		cout << "+--------------------------------------+" << endl;
 		cout << endl;
 		cout << "    Choose item to be update : ";
 		cin >> selectionKey;
+		if (selectionKey == 0) {
+			updateStocks();
+		}
 		cout << "    Input new value : ";
 		cin >> newVal;
 		drinksQty[selectionKey-1] = newVal;
@@ -737,12 +767,19 @@ void updateStocks() { //---------------------------------------updateStocks
 			cout << " Stocks : " << iceCreamQty[i] << endl;
 			cout << "+--------------------------------------+" << endl;
 		}
+		cout << "|             [0] Back                 |" << endl;
+		cout << "+--------------------------------------+" << endl;
 		cout << endl;
 		cout << "    Choose item to be update : ";
 		cin >> selectionKey;
+		if (selectionKey == 0) {
+			updateStocks();
+		}
 		cout << "    Input new value : ";
 		cin >> newVal;
 		iceCreamQty[selectionKey-1] = newVal;
+	} else {
+		inputErrorHandling();
 	}
 	system("cls");
 	cout << "+--------------------------------------+" << endl;
@@ -750,6 +787,7 @@ void updateStocks() { //---------------------------------------updateStocks
 	cout << "+--------------------------------------+" << endl;
 	cout << "    Press Enter to Continue ";
 	getch();
+	updateStocks();
 }
 
 void statistics() { //-------------------------------------------statistics
@@ -769,10 +807,7 @@ void statistics() { //-------------------------------------------statistics
 	cout << "|   Total payment : RM " << moneyFromCust << endl;
 	cout << "|" << endl;
 	cout << "+--------------------------------------+" << endl;
-	cout << "|   Average : RM " << moneyFromCust/totalCust << endl;
-	cout << "|   " << endl;
-	cout << "+--------------------------------------+" << endl;
-	cout << "    Press Enter to continue ";
+	cout << "    Press Enter to back ";
 	getch();
 }
 
@@ -786,7 +821,7 @@ void addInfo() { //------------------------------------------------addInfo
 	cout << "|     Last update : 14/1/2023          |" << endl;
 	cout << "+--------------------------------------+" << endl;
 	cout << endl;
-	cout << "    Press Enter to continue ";
+	cout << "    Press Enter to back ";
 	getch();
 }
 
