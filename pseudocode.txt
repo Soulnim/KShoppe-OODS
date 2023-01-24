@@ -1,93 +1,821 @@
+foodsList[99][99] = {"Nasi Minyak Ayam Kari", "Nasi Minyak Ayam Merah", "Mee Kari", "Nasi Kandar"}
+foodsQty[99] = {10, 10, 10, 10}
+foodsPrice[99] = {7.00, 7.00, 6.00, 8.00}
+drinksList[99][99] = {"Milo Kotak", "Jagung Susu", "Air Kosong"}
+drinksQty[99] = {10, 10, 10}
+drinksPrice[99] = {2.50, 5.00, 1.00}
+iceCreamList[99][99] = {"Magnolia", "Aiskrim Malaysia", "Magnum"}
+iceCreamQty[99] = {10, 10, 10}
+iceCreamPrice[99] = {7.00, 0.50, 4.50}
+totalCust = 0
+paymentList[99] = {}
+isStaff = false
+cartIsEmpty = true
+
+main()
 START
-  Set total = 0
-  Set proceed = ‘Y’
-  Display “Welcome to KShoppe Online Order”
-  WHILE proceed == ‘Y’
-    Display “CATEGORIES”
-    Display “A. Donut”
-    Display “B. Nasi”
-    Display “C. Roti”
-    Prompt “Enter category code : “
-    Read category
-    WHILE category != 'A' && category != 'B' && category != 'C'
-      Clear screen
-      IF category == ‘A’
-        Display “DESERT			PRICE”
-        Display “1. Chocalate Donut		RM3.50”
-        Display “2. Strawberry Donut		RM3.50”
-        Display “3. Cheese Cake Strawberry	RM10”
-        Display “4. Cheese Cake Mango		RM10”
-        Display “Enter beverage number code : “
-        Read code
-        Prompt “Enter quantity : “
-        Read qty
-        IF code == ‘1’
-	        price = 3.5 * qty
-        ELSE IF code == ‘2’
-        	price = 3.5 * qty
-      	ELSE IF code == ‘3’
-      		price = 10 * qty
-      	ELSE IF code == ‘4’
-      		price == 10 * qty
-      	ENDIF
-      	total =  total + price
-      ELSE IF category == ‘B’
-        Display “NASI				PRICE”
-        Display “1. Nasi lemak			RM3.00”
-        Display “2. Nasi lemak telur mata	RM4.00”
-        Display “3. Nasi lemak ayam		RM5.00”
-        Display “4. Nasi berlauk 			RM4.00”
-        Display “Enter nasi number code : “
-        Read code
-        Prompt “Enter quantity : “
-        Read qty
-        IF code == ‘1’
-	        price = 3 * qty
-        ELSE IF code == ‘2’
-        	price = 4 * qty
-	      ELSE IF code == ‘3’
-	       	price = 5 * qty
-      	ELSE IF code == ‘4’
-      		price = 4 * qty
-      	ENDIF
-      	total =  total + price
-     	ELSE IF category == ‘C’
-        Display “BREAD			PRICE”
-        Display “1. Roti pizza bulat	RM3.00”
-        Display “2. Roti pizza panjang	RM3.00”
-        Display “3. Roti badam		RM3.00”
-        Display “4. Sandwich		RM2.80”
-        Display “Enter bread number code : “
-        Read code
-        Display “Enter quantity : “
-        Read qty
-        IF code == ‘1’
-        	price = 3 * qty
-        ELSE IF code == ‘2’
-        	price = 3 * qty
-      	ELSE IF code == ‘3’
-      		price = 3 * qty
-	      ELSE IF code == ‘4’
-      		price = 2.8 * qty
-      	ENDIF
-        total =  total + price
-       ENDIF
-       Display “Total is RM” , total
-       Prompt “Do you want to continue? <Y/N> : “
-       Read proceed
-     ENDWHILE
-	  ENDWHILE
-	 IF proceed != “Y”
-		Display “Your order will be arrived on your doorstep”
-		Prompt “College (MK / TT1 / TT2) : “
-		Read college
-    Prompt “Floor (1-10) : “
+	custOrStaff
+	isStaff = false
+	isTerminate = false
+	WHILE (isTerminate == false)
+		Display "+--------------------------------------+" 
+		Display "|          WELCOME TO KSHOPPE          |" 
+		Display "+--------------------------------------+" 
+		Display "|         ( )             [ ]          |" 
+		Display "|         / \\            / \          |" 
+		Display "|     [1] Customer      [2] Staff      |" 
+		Display "+--------------------------------------+" 
+		Prompt "            Enter key : "
+		Read custOrStaff
+		IF (custOrStaff == '1') 
+			custOrder()
+		ELSE IF (custOrStaff == '2') 
+			staffOp()
+		ELSE 
+			inputErrorHandling()
+		ENDIF
+	ENDWHILE
+END
+
+void custOrder()
+START
+	isAdding = true
+	totalPrice = 0
+	itemCart[99]
+	itemPrice[99]
+	itemQty[99]
+	FOR ( i = 0; i < 99; i++) 
+		itemCart[i] = "0"
+	ENDFOR
+	pickupMethod = pickupChoose()
+	WHILE (isAdding == true) 
+		isEnough = category(itemCart, itemPrice, itemQty)
+		IF (isEnough == true) 
+			isContinue = 'Y'
+			Prompt "    Add another order? (Y/N) : "
+			Read isContinue
+			IF (toupper(isContinue) == 'N') 
+				isAdding = false
+			ENDIF
+		ENDIF
+	ENDWHILE
+	IF (cartIsEmpty != true) 
+		FOR ( i = 0; i < 99; i++) 
+			IF (itemCart[i] != "0") 
+				totalPrice = totalPrice + (itemPrice[i] * itemQty[i])
+			ENDIF
+		ENDFOR
+		Display "+--------------------------------------+" 
+		Display "|             ORDER LIST               |" 
+		Display "+--------------------------------------+" 
+		FOR ( i = 0; i < 99; i++) 
+			IF (itemCart[i] != "0") 
+				Display "   " , i+1 , ". " , itemCart[i] , " (" , itemQty[i] , ")" 
+			ENDIF
+		ENDFOR
+		Display "+--------------------------------------+" 
+		Display "|   The total price : RM " , totalPrice 
+		Display "+--------------------------------------+" 
+		Prompt “    Press Enter to continue “
+		getch()
+		custPayment(totalPrice, pickupMethod)
+		paymentList[totalCust] = totalPrice
+	ENDIF
+	main()
+END
+
+ 
+char pickupChoose()
+START
+	truePickupMethod = false
+	WHILE (truePickupMethod != true) 
+		Display "+--------------------------------------+" 
+		Display "|            PICKUP METHOD             |" 
+		Display "+--------------------------------------+" 
+		Display "|       / |--|           /==\\          |" 
+		Display "|       -o--o-           |__|          |" 
+		Display "|   [D] Delivery    [S] Self Pickup    |" 
+		Display "+--------------------------------------+" 
+		Display "|             [0] Back                 |" 
+		Display "+--------------------------------------+" 
+		Prompt "     Choose your preference : "
+		Read pickupMethod
+		pickupMethod = toupper(pickupMethod)
+		IF (pickupMethod == 'D' || pickupMethod == 'S') 
+			truePickupMethod = true
+		ELSE IF (pickupMethod == '0') 
+			main()
+		ELSE 
+			inputErrorHandling()
+			truePickupMethod = false
+		ENDIF
+	ENDWHILE
+	return pickupMethod
+END
+
+ 
+bool food( itemCart[99],  itemPrice[99],  itemQty[99])
+START
+	isAdding = true
+	foodsMenu()
+	Prompt "    Choose your food : "
+	Read orderKey
+	IF (orderKey >= 1 && orderKey <= 4) 
+		
+		Display "+--------------------------------------+" 
+		Display "  " , foodsList[orderKey-1] 
+		Display "  Price : RM " , foodsPrice[orderKey-1] 
+		Display "        ooo                            |" 
+		Display "       \\___/                           |" 
+		Display "+--------------------------------------+" 
+		Display "|             [0] Back                 |" 
+		Display "+--------------------------------------+" 
+		Prompt "          Enter quantity : "
+		Read foodQty
+		IF (foodsQty[orderKey-1] - foodQty  < 0) 
+			noStock()
+		ELSE IF (foodQty == 0) 
+			goto pointFood
+		ELSE 
+			FOR ( i = 0; i < 99; i++) 
+				cartIsEmpty = false
+				isEnough = true
+				IF (itemCart[i] == "0") 
+					itemCart[i] = foodsList[orderKey-1]
+					itemPrice[i] = foodsPrice[orderKey-1]
+					itemQty[i] = foodQty
+					
+					Display "+--------------------------------+" 
+					Display "|Item successfully added to cart!|" 
+					Display "+--------------------------------+" 
+				ENDIF
+			ENDFOR
+				foodsQty[orderKey-1] -= foodQty
+		END
+	ELSE IF (orderKey == 0) 
+		category(itemCart, itemPrice, itemQty)
+	ELSE 
+		inputErrorHandling()
+	ENDIF
+	return isEnough
+END
+
+ 
+bool drink( itemCart[99],  itemPrice[99],  itemQty[99])
+START
+	isAdding = true
+	pointDrink:
+	drinksMenu()
+	Prompt "    Choose your drinks : "
+	Read orderKey
+	IF (orderKey >= 1 && orderKey <= 3)
+		Display "+--------------------------------------+" 
+		Display "  " , drinksList[orderKey-1] 
+		Display "  Price : RM " , drinksPrice[orderKey-1] 
+		Display "      [ ]                              |" 
+		Display "      [ ]                              |" 
+		Display "+--------------------------------------+" 
+		Display "|             [0] Back                 |" 
+		Display "+--------------------------------------+" 
+		Prompt "          Enter quantity : "
+		Read drinksQuantity
+		IF (drinksQty[orderKey-1] - drinksQuantity  < 0) 
+			noStock()
+		ELSE IF (drinksQuantity == 0) 
+			goto pointDrink
+		ELSE 
+			isEnough = true
+			cartIsEmpty = false
+				FOR ( i = 0; i < 99; i++) 
+					IF (itemCart[i] == "0") 
+						itemCart[i] = drinksList[orderKey-1]
+						itemPrice[i] = drinksPrice[orderKey-1]
+						itemQty[i] = drinksQuantity
+						
+						Display "+--------------------------+" 
+						Display "|Item successfully added to cart!|" 
+						Display "+--------------------------+"
+					ENDIF
+				ENDFOR
+			drinksQty[orderKey-1] -= drinksQuantity
+		ENDIF 	
+	ELSE IF (orderKey == 0) 
+		category(itemCart, itemPrice, itemQty)
+	ELSE 
+		inputErrorHandling()
+	ENDIF
+	return isEnough
+END
+
+ 
+bool iceCream( itemCart[99],  itemPrice[99],  itemQty[99])
+START
+	isAdding = true
+	cartIsEmpty = true
+	pointIceCream:
+	iceCreamMenu()
+	Prompt "     Choose your ice cream : "
+	Read orderKey
+	IF (orderKey >= 1 && orderKey <= 3) 
+		Display "+--------------------------------------+" 
+		Display "  " , iceCreamList[orderKey-1] 
+		Display "  Price : RM " , iceCreamPrice[orderKey-1] 
+		Display "     O                                 |" 
+		Display "     \\/                                |" 
+		Display "+--------------------------------------+" 
+		Display "|             [0] Back                 |" 
+		Display "+--------------------------------------+" 
+		Prompt "          Enter quantity : "
+		Read iceCreamQuantity
+		IF (iceCreamQty[orderKey-1] - iceCreamQuantity  < 0) 
+			noStock()
+		ELSE IF (iceCreamQuantity == 0) 
+			goto pointIceCream
+		ELSE 
+			isEnough = true
+			cartIsEmpty = false
+			FOR ( i = 0; i < 99; i++) 
+				IF (itemCart[i] == "0") 
+					itemCart[i] = iceCreamList[orderKey-1]
+					itemPrice[i] = iceCreamPrice[orderKey-1]
+					itemQty[i] = iceCreamQuantity
+					
+					Display "+--------------------------------+" 
+					Display "|Item successfully added to cart!|" 
+					Display "+--------------------------------+" 
+				ENDIF
+			ENDFOR
+			iceCreamQty[orderKey-1] -= iceCreamQuantity
+		ENDIF
+	ELSE IF (orderKey == 0) 
+		category(itemCart, itemPrice, itemQty)
+	ELSE 
+		inputErrorHandling()
+	ENDIF
+	return isEnough
+END
+
+ 
+bool category(string itemCart[99], float itemPrice[99], int itemQty[99])
+START
+	Display "+--------------------------------------+" 
+	Display "|           K-SHOPPE ONLINE            |" 
+	Display "+--------------------------------------+" 
+	Display "|   ooo          [ ]           Oo      |" 
+	Display "|  \\___/         [ ]           \\/      |" 
+	Display "|[1] Foods   [2] Drinks  [3] Ice Cream |" 
+	Display "+--------------------------------------+" 
+	Display "|             [0] Back                 |" 
+	Display "+--------------------------------------+" 
+	Prompt"       Choose category : "
+	Read category
+	IF (category == '1') 
+		isEnough = food(itemCart, itemPrice, itemQty)
+	ELSE IF (category == '2') 
+		isEnough = drink(itemCart, itemPrice, itemQty)
+	ELSE IF (category == '3') 
+		isEnough = iceCream(itemCart, itemPrice, itemQty)
+	ELSE IF (category == '0') 
+		isEnough = false
+		pickupChoose()
+	END ELSE 
+		inputErrorHandling()
+	ENDIF
+	return isEnough
+END
+
+ 
+void foodsMenu()
+START
+	Display "+--------------------------------------+" 
+	Display "|            Shop! >> Foods            |" 
+	Display "+--------------------------------------+" 
+	FOR ( i = 0; i < 4; i++) 
+		Display "   " , i + 1 , ". " , foodsList[i] 
+		Display "   Price : RM " , foodsPrice[i] , " , Available : " , foodsQty[i] 
+		Display "+--------------------------------------+" 
+	ENDFOR
+	Display "|             [0] Back                 |" 
+	Display "+--------------------------------------+" 
+END
+
+void drinksMenu()
+START
+	Display "+--------------------------------------+" 
+	Display "|           Shop! >> Drinks            |" 
+	Display "+--------------------------------------+" 
+	FOR ( i = 0; i < 3; i++) 
+		Display "    " , i + 1 , ". " , drinksList[i] 
+		Display "    Price : RM " , drinksPrice[i] , " , Available : " , drinksQty[i] 
+		
+		Display "+--------------------------------------+" 
+	ENDFOR
+	Display "|             [0] Back                 |" 
+	Display "+--------------------------------------+" 
+END
+
+void iceCreamMenu()
+START
+	Display "+--------------------------------------+" 
+	Display "|           Shop! >> Ice Cream         |" 
+	Display "+--------------------------------------+" 
+	FOR ( i = 0; i < 3; i++) 
+		Display "    " , i + 1 , ". " , iceCreamList[i] 
+		Display "    Price : RM " , iceCreamPrice[i] , " , Available : " , iceCreamQty[i] 
+		Display "+--------------------------------------+" 
+	ENDFOR
+	Display "|             [0] Back                 |" 
+	Display "+--------------------------------------+" 
+END
+
+ 
+void custPayment(float totalMoneyThatCustNeedToPay, char whereItemGo)
+START
+	IF (whereItemGo == 'S' || whereItemGo == 's') 
+		Display "+--------------------------------------+" 
+		Display "|            PAYMENT METHOD            |" 
+		Display "+--------------------------------------+" 
+		Display "|         /--\\              (  )        |" 
+		Display "|         |  |              (  )       |" 
+		Display "|   [1] Pay On Pickup      [2] FPX      |" 
+		Display "+--------------------------------------+" 
+		Prompt "       Choose payment method : "
+		Read paymentKey
+
+		IF (paymentKey == 1) 
+			Display "+--------------------------------------+" 
+			Display "|      Checked Out Successfully!       |" 
+			Display "+--------------------------------------+" 
+			Display "    Order Code : C" , totalCust 
+			Display "    Total amount : RM " , totalMoneyThatCustNeedToPay 
+			Display "    Thank you!" 
+			Display "+--------------------------------------+" 
+			Prompt “    Press Enter to continue “
+			getch()
+		ELSE 
+			fpxPayment(totalMoneyThatCustNeedToPay)
+			Display "+--------------------------------------+" 
+			Display "|      Checked Out Successfully!       |" 
+			Display "+--------------------------------------+" 
+			
+		ENDIF
+	ELSE 
+		custPlaceKey[99] = {}
+		custRoomNumber[99] = {}
+		custFloor[99] = {}
+		pointKolej:
+
+		Display "+--------------------------------------+" 
+		Display "|         Enter your address :         |" 
+		Display "+--------------------------------------+" 
+		Display "   [1] Kolej Mat Kilau" 
+		Display "   [2] Kolej Tun Teja" 
+		Display "   [3] Bangunan Sarjana" 
+		Display "   [4] Bangunan Cendekiawan" 
+		Prompt "  Send to : "
+		Read placeKey
+		
+		IF (placeKey == '1')
+			placeName = "Kolej Mat Kilau"
+		ELSE IF (placeKey == '2')
+			placeName = "Kolej Tun Teja"
+		ELSE IF (placeKey == '3')
+			placeName = "Bangunan Sarjana"
+		ELSE IF (placeKey == '4')
+			placeName = "Bangunan Cendekiawan"
+		ELSE
+			inputErrorHandling()
+			goto pointKolej
+		ENDIF
+		
+		Prompt "  Floor : "
 		Read floor
-		Prompt “House number (1-25)  : 
-		Read house
-    Set orderCode =  random(999)
-    Display “Your order code is : “ , orderCode
-    Display “Please use this code for comfirmation with the delivery person”
-  ENDIF
-  Display “Thank you for choosing our shop!”
+		Prompt"  Room Number : "
+		Read roomNumber
+		
+		custPlaceKey[totalCust] = placeKey
+		custFloor[totalCust] = floor
+		custRoomNumber[totalCust] = roomNumber
+		fpxPayment(totalMoneyThatCustNeedToPay)
+		totalCust = totalCust + 1
+		
+		Display "+--------------------------------------+" 
+		Display "|      Checked Out Successfully!       |" 
+		Display "+--------------------------------------+" 
+		Display "    Order Code : C" , (totalCust) 
+		Display "    Total amount : RM " , totalMoneyThatCustNeedToPay 
+		Display "    Delivery address : " , placeName , ", Floor " , floor , ", Room " , roomNumber 
+		Display "    Thank you!" 
+		Display "+--------------------------------------+" 
+		Prompt “    Press Enter to continue “
+		getch()
+	ENDIF
+	cartIsEmpty = true
+END
+
+ 
+void fpxPayment(float money)
+START
+	pointBank:
+	Display "+--------------------------------------+" 
+	Display "|              FPX GATEWAY             |" 
+	Display "+--------------------------------------+" 
+	Display "| [A] Bank Islam                       |" 
+	Display "| [B] BSN                              |" 
+	Display "| [C] RHB                              |" 
+	Display "| [D] Maybank                          |" 
+	Display "+--------------------------------------+" 
+	Prompt "       Choose your bank : "
+	Read bankKey
+	IF (bankKey == 'A' || bankKey == 'a') 
+		Display "+--------------------------------------+" 
+		Display "| Redirecting to Bank Islam's page...  |" 
+		Display "+--------------------------------------+" 
+		
+	ELSE IF (bankKey == 'B' || bankKey == 'b') 
+		Display "+--------------------------------------+" 
+		Display "|     Redirecting to BSN's page...     |" 
+		Display "+--------------------------------------+" 
+		
+	ELSE IF (bankKey == 'C' || bankKey == 'c') 
+		Display "+--------------------------------------+" 
+		Display "|     Redirecting to RHB's page...     |" 
+		Display "+--------------------------------------+" 
+		
+	ELSE IF (bankKey == 'D' || bankKey == 'd')
+		Display "+--------------------------------------+" 
+		Display "|   Redirecting to Maybank's page...   |" 
+		Display "+--------------------------------------+" 
+		
+	ELSE 
+		inputErrorHandling()
+		goto pointBank
+	ENDIF
+END
+
+ 
+void noStock()
+START
+	Display "+--------------------------------------+" 
+	Display "|       Sorry, Item Out Of Stock!      |" 
+	Display "+--------------------------------------+" 
+	Prompt “      Press Enter to continue “
+	getch()
+END
+
+void inputErrorHandling()
+START
+	Display "+--------------------------------------+" 
+	Display "|            Invalid input!            |" 
+	Display "+--------------------------------------+" 
+	Prompt “      Press Enter to continue “
+	getch()
+END
+
+void inputPlease()
+START
+	Display "+--------------------------------------+" 
+	Display "|        Please input amount!          |" 
+	Display "+--------------------------------------+" 
+	Prompt “      Press Enter to continue “
+	getch()
+END
+
+ 
+void staffOp()
+START
+	IF (isStaff != true) 
+		isStaff = staffLogin()
+	ENDIF
+	WHILE (isStaff == true) 
+		staffMenu()
+		Prompt "    Enter key : "
+		Read keyStaff
+		IF (keyStaff == 1) 
+			stocksOp()
+		ELSE IF (keyStaff == 2) 
+			statistics()
+		ELSE IF (keyStaff == 3) 
+			addInfo()
+		ELSE IF (keyStaff == 4) 
+			isStaff = false
+			main()
+		ELSE IF (keyStaff == 5) 
+			 termOrNot = terminateProgram()
+			IF (termOrNot == true) 
+				isStaff = false
+			ENDIF
+		ELSE 
+			inputErrorHandling()
+		ENDIF
+	ENDWHILE
+END
+
+ 
+void stocksOp()
+START
+	isKeyStocks = false
+	WHILE (isKeyStocks == false) 
+		Display "+--------------------------------------+" 
+		Display "|                STOCKS                |" 
+		Display "+--------------------------------------+" 
+		Display "|       [===]              =\\==        |" 
+		Display "|       [===]              ==\\=        |" 
+		Display "|  [1] View Stocks  [2] Update Stocks  |" 
+		Display "+--------------------------------------+" 
+		Display "|             [0] Back                 |" 
+		Display "+--------------------------------------+" 
+		Prompt "          Enter key : "
+		Read keyStocks
+		IF (keyStocks == 1 || keyStocks == 2) 
+			isKeyStocks = true
+		ELSE IF (keyStocks == 0) 
+			isStaff == true
+			staffOp()
+		ELSE 
+			inputErrorHandling()
+		ENDIF
+	ENDWHILE
+	IF (keyStocks == 1) 
+		viewStocks()
+	ELSE IF (keyStocks == 2) 
+		updateStocks()
+	ENDIF
+END
+
+void staffMenu()
+START
+	Display "+--------------------------------------+" 
+	Display "|           K-SHOPPE STAFF             |" 
+	Display "+--------------------------------------+" 
+	Display "|   1. Stocks                          |" 
+	Display "|   2. Statistics                      |" 
+	Display "|   3. Additional Info                 |" 
+	Display "|   4. Exit                            |" 
+	Display "+--------------------------------------+" 
+	Display "|  [5] Terminate Session               |" 
+	Display "+--------------------------------------+" 
+END
+
+ 
+bool staffLogin()
+START
+	trueStaff = false
+	staffName[99][99] = {"Luqman", "Syafiq", "Ian"}
+	staffPass[99][99] = {"luqman123", "syafiq123", "ian123"}
+	Display "+--------------------------------------+" 
+	Display "|             STAFF LOGIN              |" 
+	Display "+--------------------------------------+" 
+	Prompt "    Enter username : "
+	Read username
+	Prompt "    Enter password : "
+	Read password
+	FOR ( i = 0; i < 3; i++) 
+		IF (strcmp(username, staffName[i]) == 0 && strcmp(password, staffPass[i]) == 0) 
+			trueStaff = true
+		ENDIF
+	ENDFOR
+	IF (trueStaff == true) 
+		Display "+--------------------------------------+" 
+		Display "|        Logged in successfully!       |" 
+		Display "+--------------------------------------+" 
+		Prompt “       Press Enter to continue “
+		getch()
+	ELSE 
+		Display "+--------------------------------------+" 
+		Display "|    Invalid username or password!     |" 
+		Display "+--------------------------------------+" 
+		Prompt “       Press Enter to continue “
+		getch()
+	ENDIF
+	return trueStaff
+END
+
+ 
+void viewStocks()
+START
+	isKey = false
+	WHILE (isKey == false) 
+		Display "+--------------------------------------+" 
+		Display "|             VIEW STOCKS              |" 
+		Display "+--------------------------------------+" 
+		Display "|   ooo          [ ]           Oo      |" 
+		Display "|  \\___/         [ ]           \\/      |" 
+		Display "|[1] Foods   [2] Drinks  [3] Ice Cream |" 
+		Display "+--------------------------------------+" 
+		Display "|             [0] Back                 |" 
+		Display "+--------------------------------------+" 
+		Prompt "    Choose category : "
+		Read stocksKey
+		
+		IF (stocksKey == 1 || stocksKey == 2 || stocksKey == 3) 
+			isKey = true
+		ELSE IF (stocksKey == 0) 
+			stocksOp()
+		ELSE 
+			inputErrorHandling()
+		ENDIF
+	ENDWHILE
+	IF (stocksKey == 1) 
+		Display "+--------------------------------------+" 
+		Display "|          STOCKS => FOODS             |" 
+		Display "+--------------------------------------+" 
+		FOR ( i = 0 i < 4 i++) 
+			Display "    " , i+1 , ". " , foodsList[i] 
+			Display "    Stocks : " , foodsQty[i] 
+			Display "+--------------------------------------+" 
+		ENDFOR
+		Prompt "    Press Enter to back "
+		getch()
+		viewStocks()
+	ELSE IF (stocksKey == 2) 
+		Display "+--------------------------------------+" 
+		Display "|          STOCKS => DRINKS            |" 
+		Display "+--------------------------------------+" 
+		FOR ( i = 0; i < 3; i++) 
+			Display "    " , i+1 , ". " , drinksList[i] 
+			Display "    Stocks : " , drinksQty[i] 
+			Display "+--------------------------------------+" 
+		ENDFOR
+		Prompt "    Press Enter to back "
+		getch()
+		viewStocks()
+	ELSE 
+		Display "+--------------------------------------+" 
+		Display "|          STOCKS => ICE CREAM         |" 
+		Display "+--------------------------------------+" 
+		FOR ( i = 0; i < 3; i++) 
+			Display " " , (i+1) , ". " , iceCreamList[i] 
+			Display " Stocks : " , iceCreamQty[i] 
+			Display "+--------------------------------------+" 
+		ENDFOR
+		Prompt "    Press Enter to back "
+		getch()
+		viewStocks()
+	ENDIF
+END
+void updateStocks()
+START
+	isKey = false
+	WHILE (isKey == false) 
+		Display "+--------------------------------------+" 
+		Display "|            UPDATE STOCKS             |" 
+		Display "+--------------------------------------+" 
+		Display "|   ooo          [ ]           Oo      |" 
+		Display "|  \\___/         [ ]           \\/      |" 
+		Display "|[1] Foods   [2] Drinks  [3] Ice Cream |" 
+		Display "+--------------------------------------+" 
+		Display "|             [0] Back                 |" 
+		Display "+--------------------------------------+" 
+		Prompt "    Choose category : "
+		Read stocksKey
+		
+		IF (stocksKey == 1 || stocksKey == 2 || stocksKey == 3) 
+			isKey = true
+		ELSE IF (stocksKey == 0) 
+			stocksOp()
+		ELSE 
+			inputErrorHandling()
+		ENDIF
+	END
+	IF (stocksKey == 1) 
+		Display "+--------------------------------------+" 
+		Display "|          STOCKS => FOODS             |" 
+		Display "+--------------------------------------+" 
+		FOR ( i = 0; i < 4; i++) 
+			Display "    " , i+1 , ". " , foodsList[i] 
+			Display "    Stocks : " , foodsQty[i] 
+			Display "+--------------------------------------+" 
+		ENDFOR
+		Display "|             [0] Back                 |" 
+		Display "+--------------------------------------+" 
+		Prompt "    Choose item to be update : "
+		Read selectionKey
+		IF (selectionKey == 0) 
+			updateStocks()
+		ENDIF
+		Prompt "    Input new value : "
+		Read newVal
+		foodsQty[selectionKey-1] = newVal
+
+	ELSE IF (stocksKey == 2) 
+		Display "+--------------------------------------+" 
+		Display "|          STOCKS => DRINKS            |" 
+		Display "+--------------------------------------+" 
+		FOR ( i = 0; i < 3; i++) 
+			Display "    " , i+1 , ". " , drinksList[i] 
+			Display "    Stocks : " , drinksQty[i] 
+			Display "+--------------------------------------+" 
+		ENDFOR
+		Display "|             [0] Back                 |" 
+		Display "+--------------------------------------+" 
+		Prompt "    Choose item to be update : "
+		Read selectionKey
+		IF (selectionKey == 0) 
+			updateStocks()
+		ENDIF
+		Prompt "    Input new value : "
+		Read newVal
+		drinksQty[selectionKey-1] = newVal
+	ELSE IF (stocksKey == 3) 
+		Display "+--------------------------------------+" 
+		Display "|          STOCKS => ICE CREAM         |" 
+		Display "+--------------------------------------+" 
+		FOR ( i = 0; i < 3; i++) 
+			Display " " , i+1 , ". " , iceCreamList[i] 
+			Display " Stocks : " , iceCreamQty[i] 
+			Display "+--------------------------------------+" 
+		ENDFOR
+		Display "|             [0] Back                 |" 
+		Display "+--------------------------------------+" 
+		Prompt "    Choose item to be update : "
+		Read selectionKey
+		IF (selectionKey == 0) 
+			updateStocks()
+		ENDIF
+		Prompt "    Input new value : "
+		Read newVal
+		iceCreamQty[selectionKey-1] = newVal
+	ELSE 
+		inputErrorHandling()
+	ENDIF
+	Display "+--------------------------------------+" 
+	Display "|        STOCK HAS BEEN UPDATED        |" 
+	Display "+--------------------------------------+" 
+	Prompt “    Press Enter to continue “
+	getch()
+	updateStocks()
+END
+
+void statistics()
+START
+	moneyFromCust = 0
+	Display "+--------------------------------------+" 
+	Display "|             STATISTICS               |" 
+	Display "+--------------------------------------+" 
+	Display "|   Total customer : " , totalCust 
+	Display "|" 
+	Display "+--------------------------------------+" 
+	FOR ( i = 0; i < 99; i++) 
+		IF (paymentList[i] > 0) 
+			moneyFromCust = moneyFromCust + paymentList[i]
+		ENDIF
+	ENDFOR
+	Display "|   Total payment : RM " , moneyFromCust 
+	Display "|" 
+	Display "+--------------------------------------+" 
+	Prompt "    Press Enter to back "
+	getch()
+END
+
+ 
+void addInfo()
+START
+	Display "+--------------------------------------+" 
+	Display "|           ADDITIONAL INFO            |" 
+	Display "+--------------------------------------+" 
+	Display "|     Program InFORmations,            |" 
+	Display "|     Version : 2.0                    |" 
+	Display "|     Last update : 23/1/2023          |" 
+	Display "+--------------------------------------+" 
+	Prompt "    Press Enter to back "
+	getch()
+END
+
+ 
+bool terminateProgram()
+START
+	isTerminate = false
+	terminateKey = 1234
+	Display "+--------------------------------------+" 
+	Display "|          SESSION TERMINATION         |" 
+	Display "+--------------------------------------+" 
+	Display "|   Are you sure? All saved data will  |" 
+	Display "|               lost...                |" 
+	Display "+--------------------------------------+" 
+	Prompt "     Press Enter to continue "
+	getch()
+	
+	Display "+--------------------------------------+" 
+	Display "|          SESSION TERMINATION         |" 
+	Display "+--------------------------------------+" 
+	Prompt "    Enter key : "
+	Read termKey
+	IF (termKey == terminateKey) 
+		Display "+--------------------------------------+" 
+		Display "|          SESSION TERMINATED          |" 
+		Display "+--------------------------------------+" 
+		isTerminate = true
+		goTerminate = true
+	ELSE
+		Display "+--------------------------------------+" 
+		Display "|       Invalid termination key!       |" 
+		Display "+--------------------------------------+" 
+		Display "|      Session termination failed!     |" 
+		Display "+--------------------------------------+" 
+		Prompt "     Press Enter to continue "
+		getch()
+		goTerminate = false
+	ENDIF
+	return goTerminate
 END
