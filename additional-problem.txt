@@ -50,3 +50,29 @@ START
 		ENDIF
 	ENDIF
 END 
+
+Problem 4
+START
+	num=1
+	positive=0
+	negative=0
+	total=0
+	i=0
+	Prompt "Enter an integer value, the program exits if the input is 0:"
+	WHILE (num!=0)
+		Read num
+		i++
+		total += num
+		IF (num>0)
+			positive++
+		ELSE IF (num<0)
+			negative++
+		ENDIF
+	ENDWHILE
+	average = total/ (i-1)
+	Display "The number of positives is ", positive
+	Display "The number of negatives is ", negative
+	Display "The total is ", total
+	Display "The average is ", average
+END
+
