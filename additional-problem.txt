@@ -9,7 +9,7 @@ START
 		Prompt "Enter : "
 		Read user
 	ENDWHILE
-	comp = rand()%2
+	comp = rand()%3
 	
 	IF (user==0)
 		Display "You use scissor"
