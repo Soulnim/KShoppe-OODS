@@ -1,4 +1,5 @@
-Problem 3
+ # Problem 3
+ 
 START
 	user=3
 	WHILE (user != 0 && user != 1 && user != 2)
@@ -51,7 +52,8 @@ START
 	ENDIF
 END 
 
-Problem 4
+# Problem 4
+
 START
 	num=1
 	positive=0
