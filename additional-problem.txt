@@ -1,0 +1,52 @@
+Problem 3
+START
+	user=3
+	WHILE (user != 0 && user != 1 && user != 2)
+		Display "Enter 0 for scissor"
+		Display "Enter 1 for rock"
+		Display "Enter 2 for paper"
+		Prompt "Enter : "
+		Read user
+	ENDWHILE
+	comp = rand()%2
+	
+	IF (user==0)
+		Display "You use scissor"
+		IF (comp==0)
+			Display "Computer use scissor"
+			Display "Draw"
+		ELSE IF(comp==1)
+			Display "Computer use rock"
+			Display "Computer win"
+		ELSE IF(comp==2)
+			Display "Computer use paper"
+			Display "You win"
+		ENDIF
+
+	ELSE IF(user==1)
+		Display "You use rock"
+		IF (comp==0)
+			Display "Computer use scissor"
+			Display "You win"
+		ELSE IF(comp==1)
+			Display "Computer use rock"
+			Display "Draw"
+		ELSE IF(comp==2)
+			Display "Computer use paper"
+			Display "Computer win"
+		ENDIF
+
+	ELSE IF(user==2)
+		Display "You use paper"
+		IF (comp==0)
+			Display "Computer use scissor"
+			Display "Computer win"
+		ELSE IF(comp==1)
+			Display "Computer use rock"
+			Display "You win"
+		ELSE IF(comp==2)
+			Display "Computer use paper"
+			Display "Draw"
+		ENDIF
+	ENDIF
+END 
